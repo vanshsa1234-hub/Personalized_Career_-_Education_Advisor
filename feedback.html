@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback - Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .feedback-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .feedback-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .feedback-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feedback-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .feedback-content {
+            padding: 3rem 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .feedback-form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-form-section h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.9rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .rating-section {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star.active {
+            color: #ffd700;
+        }
+
+        .rating-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .feedback-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .feedback-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feedback-card h3 {
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .feedback-stats {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #c3e6cb;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .testimonial-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .feedback-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .feedback-hero p {
+                font-size: 1.1rem;
+            }
+
+            .feedback-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .rating-stars {
+                gap: 0.25rem;
+            }
+
+            .star {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feedback-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎓 Path Finder</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aptitude.html">Aptitude Test</a></li>
+                <li><a href="careers.html">Careers</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="colleges.html">Colleges</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay"></div>
+    <div class="sidebar">
+        <ul class="sidebar-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aptitude.html">Aptitude Test</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="colleges.html">Colleges</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="login.html">Log In</a></li>
+        </ul>
+        <div class="sidebar-buttons">
+            <a href="aptitude.html" class="sidebar-cta">Take Test</a>
+            <a href="login.html" class="sidebar-login">Log In</a>
+        </div>
+    </div>
+
+    <div class="feedback-hero">
+        <div class="container">
+            <h1>Share Your Feedback</h1>
+            <p>Your feedback helps us improve Path Finder and provide better career guidance</p>
+        </div>
+    </div>
+
+    <main class="feedback-container">
+        <div class="feedback-content fade-in">
+            <div class="feedback-form-section">
+                <h2>📝 Tell Us Your Thoughts</h2>
+                <form id="feedbackForm" class="feedback-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email">
+                    </div>
+
+                    <div class="rating-section">
+                        <label>How would you rate your experience?</label>
+                        <div class="rating-stars" id="ratingStars">
+                            <span class="star" data-rating="1">⭐</span>
+                            <span class="star" data-rating="2">⭐</span>
+                            <span class="star" data-rating="3">⭐</span>
+                            <span class="star" data-rating="4">⭐</span>
+                            <span class="star" data-rating="5">⭐</span>
+                        </div>
+                        <div class="rating-text" id="ratingText">Click to rate</div>
+                        <input type="hidden" id="rating" name="rating" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackType">Feedback Category</label>
+                        <select id="feedbackType" name="feedbackType" required>
+                            <option value="">Select Category</option>
+                            <option value="general">General Feedback</option>
+                            <option value="aptitude-test">Aptitude Test</option>
+                            <option value="career-guidance">Career Guidance</option>
+                            <option value="college-info">College Information</option>
+                            <option value="study-resources">Study Resources</option>
+                            <option value="user-interface">User Interface</option>
+                            <option value="technical-issue">Technical Issue</option>
+                            <option value="feature-request">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackMessage">Your Feedback</label>
+                        <textarea id="feedbackMessage" name="feedbackMessage" placeholder="Please share your thoughts, suggestions, or any issues you've encountered..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span id="btnText">Submit Feedback</span>
+                        <span id="btnLoading" style="display: none;">Submitting...</span>
+                    </button>
+                </form>
+
+                <div id="successMessage" class="success-message">
+                    ✅ Thank you for your valuable feedback! Your input helps us improve Path Finder.
+                </div>
+            </div>
+
+            <div class="feedback-info-section">
+                <div class="feedback-card">
+                    <span class="feedback-card-icon">💬</span>
+                    <h3>Why Your Feedback Matters</h3>
+                    <p>Your opinions and suggestions help us enhance Path Finder to better serve students and career seekers. We carefully review every piece of feedback to improve our platform.</p>
+                </div>
+
+                <div class="feedback-stats">
+                    <h3>📊 Community Impact</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Students Helped</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Feedback Received</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Satisfaction Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-section">
+                    <h3>What Our Users Say</h3>
+                    <div class="testimonial">
+                        <div class="testimonial-text">"Path Finder helped me discover my passion for engineering. The aptitude test was spot on!"</div>
+                        <div class="testimonial-author">- Rahul S., Class 12 Student</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-text">"The career roadmap feature is amazing. It gave me a clear path forward."</div>
+                        <div class="testimonial-author">- Priya M., Graduate Student</div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-text">"Great college information and scholarship details. Very helpful for students."</div>
+                        <div class="testimonial-author">- Arjun K., Career Counselor</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aptitude.html">Aptitude Test</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="colleges.html">Colleges</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="login.html">Log In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; Path Finder - Your Digital Career Guide. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const ratingText = document.getElementById('ratingText');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.dataset.rating;
+                ratingInput.value = rating;
+
+                // Update star display
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+
+                // Update rating text
+                const ratingTexts = {
+                    1: 'Poor',
+                    2: 'Fair',
+                    3: 'Good',
+                    4: 'Very Good',
+                    5: 'Excellent'
+                };
+                ratingText.textContent = ratingTexts[rating];
+            });
+        });
+
+        // Form submission handling
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const successMessage = document.getElementById('successMessage');
+
+            // Check if rating is selected
+            if (!ratingInput.value) {
+                alert('Please select a rating before submitting.');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+
+            // Simulate form submission (replace with actual API call)
+            setTimeout(() => {
+                // Reset loading state
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+
+                // Show success message
+                successMessage.style.display = 'block';
+
+                // Reset form
+                this.reset();
+                stars.forEach(s => s.classList.remove('active'));
+                ratingText.textContent = 'Click to rate';
+                ratingInput.value = '';
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }, 2000);
+        });
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

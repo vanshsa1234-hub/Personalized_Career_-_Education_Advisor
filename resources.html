@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Study Resources - Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #667eea;
+        }
+
+        /* Main Content */
+        main {
+            padding-top: 100px;
+        }
+
+        main h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        main p {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .resource-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-card strong {
+            color: #333;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #667eea;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            main h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 2rem;
+            }
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <style>
+        .resources-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .resources-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .resources-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .resources-filters {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .resource-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .resource-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .resource-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .resource-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .resource-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #4CAF50;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .resource-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-card {
+                padding: 1.5rem;
+            }
+
+            .resources-filters {
+                padding: 1.5rem;
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .resources-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .resources-hero p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎓 Path Finder</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aptitude.html">Aptitude Test</a></li>
+                <li><a href="careers.html">Careers</a></li>
+                <li><a href="resources.html" class="active">Resources</a></li>
+                <li><a href="colleges.html">Colleges</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay"></div>
+    <div class="sidebar">
+        <ul class="sidebar-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aptitude.html">Aptitude Test</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="colleges.html">Colleges</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="login.html">Log In</a></li>
+        </ul>
+        <div class="sidebar-buttons">
+            <a href="aptitude.html" class="sidebar-cta">Take Test</a>
+            <a href="login.html" class="sidebar-login">Log In</a>
+        </div>
+    </div>
+
+    <div class="resources-hero">
+        <div class="container">
+            <h1>Study Resources</h1>
+            <p>Access curated educational resources, practice materials, and learning tools to excel in your studies</p>
+        </div>
+    </div>
+
+    <main class="container" style="padding: 3rem 0;">
+        <div class="fade-in">
+            <div class="resources-filters">
+                <button class="filter-btn active" data-category="all">All Resources</button>
+                <button class="filter-btn" data-category="video">Video Lectures</button>
+                <button class="filter-btn" data-category="practice">Practice Tests</button>
+                <button class="filter-btn" data-category="books">Books & PDFs</button>
+                <button class="filter-btn" data-category="tools">Study Tools</button>
+                <button class="filter-btn" data-category="courses">Online Courses</button>
+            </div>
+
+            <div id="resourcesGrid" class="resources-grid"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aptitude.html">Aptitude Test</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="colleges.html">Colleges</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="login.html">Log In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; Path Finder - Your Digital Career Guide. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const resources = [
+            {
+                title: "Khan Academy",
+                description: "Free online courses, lessons, and practice exercises covering math, science, computer programming, and more.",
+                icon: "🎥",
+                category: "video",
+                features: ["Free Access", "Interactive Lessons", "Practice Exercises", "Progress Tracking"],
+                link: "https://www.khanacademy.org",
+                badge: "Most Popular",
+                stats: { users: "10M+", rating: "4.8" }
+            },
+            {
+                title: "Coursera",
+                description: "Online learning platform offering courses, certificates, and degrees from top universities and companies.",
+                icon: "🎓",
+                category: "courses",
+                features: ["University Courses", "Professional Certificates", "Specializations", "Degrees"],
+                link: "https://www.coursera.org",
+                badge: "Premium",
+                stats: { users: "50M+", rating: "4.7" }
+            },
+            {
+                title: "NCERT Solutions",
+                description: "Complete solutions for NCERT textbooks with detailed explanations and step-by-step answers.",
+                icon: "📚",
+                category: "books",
+                features: ["CBSE Aligned", "Detailed Solutions", "Free Access", "All Subjects"],
+                link: "https://ncert.nic.in",
+                badge: "Official",
+                stats: { users: "5M+", rating: "4.9" }
+            },
+            {
+                title: "Unacademy",
+                description: "India's largest learning platform with live classes, test series, and study materials for competitive exams.",
+                icon: "📱",
+                category: "courses",
+                features: ["Live Classes", "Test Series", "Study Materials", "Doubt Clearing"],
+                link: "https://www.unacademy.com",
+                badge: "Trending",
+                stats: { users: "15M+", rating: "4.6" }
+            },
+            {
+                title: "JEE/NEET Mock Tests",
+                description: "Practice mock tests for engineering and medical entrance exams with detailed performance analysis.",
+                icon: "📝",
+                category: "practice",
+                features: ["Full-length Tests", "Performance Analysis", "Previous Papers", "Time Management"],
+                link: "https://www.embibe.com",
+                badge: "Exam Prep",
+                stats: { users: "8M+", rating: "4.5" }
+            },
+            {
+                title: "GeeksforGeeks",
+                description: "Computer science portal for geeks with programming tutorials, interview preparation, and coding challenges.",
+                icon: "💻",
+                category: "tools",
+                features: ["Programming Tutorials", "Interview Prep", "Coding Challenges", "Articles"],
+                link: "https://www.geeksforgeeks.org",
+                badge: "Tech Focus",
+                stats: { users: "12M+", rating: "4.7" }
+            },
+            {
+                title: "BYJU'S Learning App",
+                description: "Interactive learning app with animated videos, personalized learning paths, and unlimited practice.",
+                icon: "📱",
+                category: "video",
+                features: ["Animated Videos", "Personalized Learning", "Unlimited Practice", "Mobile App"],
+                link: "https://byjus.com",
+                badge: "Interactive",
+                stats: { users: "20M+", rating: "4.4" }
+            },
+            {
+                title: "Vedantu",
+                description: "Online tutoring platform with live classes, doubt sessions, and comprehensive study materials.",
+                icon: "👨‍🏫",
+                category: "courses",
+                features: ["Live Tutoring", "Doubt Sessions", "Study Materials", "One-on-One Classes"],
+                link: "https://www.vedantu.com",
+                badge: "Personalized",
+                stats: { users: "6M+", rating: "4.6" }
+            },
+            {
+                title: "Toppr",
+                description: "Adaptive learning platform with personalized practice tests and instant doubt solving.",
+                icon: "🎯",
+                category: "practice",
+                features: ["Adaptive Tests", "Instant Solutions", "Personalized Practice", "Analytics"],
+                link: "https://www.toppr.com",
+                badge: "Smart Learning",
+                stats: { users: "4M+", rating: "4.5" }
+            },
+            {
+                title: "MIT OpenCourseWare",
+                description: "Free lecture notes, exams, and videos from MIT. A great resource for self-learners.",
+                icon: "🎓",
+                category: "courses",
+                features: ["Free Access", "University Level", "Wide Range of Subjects", "Self-paced"],
+                link: "https://ocw.mit.edu",
+                badge: "Free",
+                stats: { users: "5M+", rating: "4.8" }
+            },
+            {
+                title: "edX",
+                description: "Online courses from top universities and institutions worldwide.",
+                icon: "🌐",
+                category: "courses",
+                features: ["University Courses", "Professional Certificates", "MicroMasters", "Degrees"],
+                link: "https://www.edx.org",
+                badge: "Premium",
+                stats: { users: "20M+", rating: "4.7" }
+            }
+        ];
+
+        const resourcesGrid = document.getElementById('resourcesGrid');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        function renderResources(resourceList) {
+            resourcesGrid.innerHTML = '';
+            if (resourceList.length === 0) {
+                resourcesGrid.innerHTML = '<div style="text-align: center; padding: 3rem; color: #666; font-size: 1.1rem; grid-column: 1 / -1;">No resources found in this category.</div>';
+                return;
+            }
+
+            resourceList.forEach(resource => {
+                const resourceCard = document.createElement('div');
+                resourceCard.className = 'resource-card fade-in';
+                resourceCard.innerHTML = `
+                    <div class="resource-header">
+                        <div class="resource-icon">${resource.icon}</div>
+                        <h3 class="resource-title">${resource.title}</h3>
+                    </div>
+                    ${resource.badge ? `<div class="resource-badge">${resource.badge}</div>` : ''}
+                    <p class="resource-description">${resource.description}</p>
+                    <div class="resource-features">
+                        ${resource.features.map(feature => `
+                            <div class="feature-item">
+                                <span>✓</span>
+                                <span>${feature}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <a href="${resource.link}" target="_blank" class="resource-link">Access Resource</a>
+                    <div class="resource-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${resource.stats.users}</div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">⭐ ${resource.stats.rating}</div>
+                            <div class="stat-label">Rating</div>
+                        </div>
+                    </div>
+                `;
+                resourcesGrid.appendChild(resourceCard);
+            });
+        }
+
+        // Filter functionality
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const category = button.dataset.category;
+                const filtered = category === 'all'
+                    ? resources
+                    : resources.filter(resource => resource.category === category);
+
+                renderResources(filtered);
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        renderResources(resources);
+    </script>
+</body>
+</html>

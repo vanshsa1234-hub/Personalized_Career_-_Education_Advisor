@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FAQ - Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .faq-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .faq-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .faq-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .faq-content {
+            padding: 3rem 0;
+        }
+
+        .faq-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .faq-category {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .faq-list {
+            padding: 0;
+            margin: 0;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.5rem;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
+
+        .faq-question:focus {
+            outline: none;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .faq-answer-content p {
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-answer-content strong {
+            color: #333;
+        }
+
+        .faq-answer-content a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .faq-answer-content a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-banner {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .contact-banner h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-banner p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .contact-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-search {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .faq-search h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .faq-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .faq-hero p {
+                font-size: 1.1rem;
+            }
+
+            .faq-question {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .faq-answer-content {
+                padding: 1rem;
+            }
+
+            .faq-category {
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎓 Path Finder</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aptitude.html">Aptitude Test</a></li>
+                <li><a href="careers.html">Careers</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="colleges.html">Colleges</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay"></div>
+    <div class="sidebar">
+        <ul class="sidebar-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aptitude.html">Aptitude Test</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="colleges.html">Colleges</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="login.html">Log In</a></li>
+        </ul>
+        <div class="sidebar-buttons">
+            <a href="aptitude.html" class="sidebar-cta">Take Test</a>
+            <a href="login.html" class="sidebar-login">Log In</a>
+        </div>
+    </div>
+
+    <div class="faq-hero">
+        <div class="container">
+            <h1>Frequently Asked Questions</h1>
+            <p>Find answers to common questions about Path Finder and career guidance</p>
+        </div>
+    </div>
+
+    <main class="faq-container">
+        <div class="faq-content fade-in">
+            <div class="faq-search">
+                <h3>🔍 Search FAQs</h3>
+                <input type="text" class="search-input" placeholder="Type your question here..." id="faqSearch">
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-category">🎓 About Path Finder</div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What is Path Finder?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Path Finder is a comprehensive digital career guidance platform designed to help students discover their strengths, interests, and suitable career paths. We provide aptitude tests, career recommendations, college information, study resources, and personalized roadmaps to guide students through their educational and career journey.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Is Path Finder free to use?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes! Path Finder offers a completely free basic service that includes aptitude testing, career exploration, college directory, and basic study resources. Some premium features may be available for enhanced functionality.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Who can use Path Finder?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Path Finder is designed for students from Class 10 to postgraduate level, as well as anyone looking to explore career options or make career transitions. Our content is particularly useful for students making subject choices after Class 10 or planning their higher education.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-category">🧠 Aptitude Test</div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How does the aptitude test work?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Our aptitude test consists of 25 carefully designed questions that assess your interests, skills, personality traits, and aptitude in different areas. The test takes about 15-20 minutes to complete. Based on your responses, we analyze your strengths and provide personalized career recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Can I retake the aptitude test?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, you can retake the aptitude test as many times as you want. This allows you to explore different career options, track your progress over time, or see how your interests evolve. Each retake provides fresh insights based on your current responses.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How accurate are the test results?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Our aptitude test is based on scientifically validated assessment methods and career guidance principles. While the results provide valuable insights into your potential career paths, they should be considered as guidance rather than definitive predictions. We recommend consulting with career counselors or mentors for personalized advice.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What if I don't agree with my results?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>The aptitude test results are based on your responses and general career trends. If you disagree with the recommendations, you can retake the test, explore other career options in our careers section, or consult with a career counselor. Your career choice should ultimately align with your interests, values, and long-term goals.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-category">🎯 Career Guidance</div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How do you recommend career paths?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>We recommend careers based on a combination of your aptitude test results, current educational background, market trends, and growth potential. Our recommendations consider factors like your interests, skills, personality type, and the practical aspects of different career paths.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do you provide information about job prospects?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, our career profiles include information about job prospects, salary ranges, growth potential, required skills, and industry trends. We regularly update this information to reflect current market conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Can I get a personalized career roadmap?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Absolutely! Based on your aptitude test results and selected career interests, we provide personalized career roadmaps with step-by-step guidance, timelines, milestones, and recommended actions for achieving your career goals.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-category">🏫 College & Education</div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do you provide college admission guidance?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>We provide comprehensive information about colleges, including admission criteria, courses offered, fees, facilities, and placement records. However, for specific admission guidance and application assistance, we recommend contacting the respective institutions directly.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What information do you have about government colleges?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Our college directory includes detailed information about government colleges across India, including IITs, NITs, central universities, and state government colleges. We provide data on admission processes, fee structures, and available scholarships.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do you help with scholarship information?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, we provide information about various scholarships available for students, including government scholarships, merit-based scholarships, and institution-specific financial aid. Our resources section also includes guidance on scholarship applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-category">📚 Account & Technical</div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How do I create an account?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Click on the "Register" button in the navigation menu. Fill in your details including name, email, password, and current class level. You'll receive a confirmation email to activate your account.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How do I reset my password?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Use the "Forgot Password" link on the login page. Enter your registered email address, and we'll send you instructions to reset your password.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Is my personal information secure?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, we take data security seriously. We use industry-standard encryption to protect your personal information and never share your data with third parties without your consent. Please refer to our Privacy Policy for more details.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Can I access Path Finder on mobile devices?
+                            <span class="faq-toggle">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                <p>Yes, Path Finder is fully responsive and works seamlessly on all devices including smartphones, tablets, and desktop computers. You can access all features from your mobile browser.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-banner">
+                <h3>Still Have Questions?</h3>
+                <p>Can't find the answer you're looking for? Our support team is here to help.</p>
+                <a href="contact.html" class="contact-button">Contact Support</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aptitude.html">Aptitude Test</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="colleges.html">Colleges</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="login.html">Log In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; Path Finder - Your Digital Career Guide. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Accordion functionality
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('faqSearch');
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

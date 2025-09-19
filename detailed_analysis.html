@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Detailed Analysis - Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: #333;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="50" r="3" fill="rgba(255,255,255,0.05)"/></svg>') repeat;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 120px auto 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem 4rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
+            animation: slideIn 0.8s ease-out;
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            border-radius: 27px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h2 {
+            color: #764ba2;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            position: relative;
+            padding-left: 20px;
+        }
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 80%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        p {
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        ul {
+            list-style-type: none;
+            margin-left: 0;
+            margin-bottom: 1.5rem;
+            padding-left: 0;
+        }
+        ul li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+        ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .section {
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        a.back-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        a.back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        a.back-btn::before {
+            content: '←';
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        /* Enhanced filter section */
+        .filter-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            animation: slideIn 0.8s ease-out 0.6s both;
+        }
+        .filter-section label {
+            font-weight: 700;
+            margin-right: 1.5rem;
+            color: #333;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .filter-section select {
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 200px;
+        }
+        .filter-section select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        .analysis-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .analysis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        .score-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0.8rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 6px;
+            transition: width 1s ease;
+            position: relative;
+        }
+        .score-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, transparent 50%, rgba(255,255,255,0.3) 100%);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .recommendation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        .recommendation-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .recommendation-box h3 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .recommendation-box p {
+            position: relative;
+            z-index: 1;
+            color: rgba(255,255,255,0.9);
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 100px 20px 40px;
+                padding: 2rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            .filter-section select {
+                min-width: 100%;
+            }
+            .analysis-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="aptitude.html" class="back-btn">← Back to Aptitude Test</a>
+        <h1>Detailed Analysis of Your Aptitude Test</h1>
+
+        <div class="filter-section">
+            <label for="analysisType">Select Analysis Type:</label>
+            <select id="analysisType" onchange="filterAnalysis()">
+                <option value="overview">Overview</option>
+                <option value="stream">Stream Recommendations</option>
+                <option value="subjects">Subject-wise Strengths</option>
+                <option value="careers">Career Suggestions</option>
+                <option value="preparation">Preparation Tips</option>
+            </select>
+        </div>
+        <div class="section">
+            <h2>Overview</h2>
+            <p>This detailed analysis provides insights into your strengths, weaknesses, and recommended academic and career paths based on your aptitude test responses.</p>
+        </div>
+        <div class="section">
+            <h2>Stream Recommendations</h2>
+            <p>Based on your answers, you are best suited for the following streams:</p>
+            <ul id="streamRecommendations">
+                <!-- Dynamic content will be inserted here -->
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Subject-wise Strengths</h2>
+            <p>Your performance in different subject categories is summarized below:</p>
+            <ul id="subjectStrengths">
+                <!-- Dynamic content will be inserted here -->
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Career Suggestions</h2>
+            <p>Based on your aptitude and interests, consider exploring these career options:</p>
+            <ul id="careerSuggestions">
+                <!-- Dynamic content will be inserted here -->
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Preparation Tips</h2>
+            <ul>
+                <li>Focus on strengthening your weaker areas through targeted study and practice.</li>
+                <li>Engage in extracurricular activities related to your recommended streams.</li>
+                <li>Seek mentorship and guidance from professionals in your fields of interest.</li>
+                <li>Prepare for relevant entrance exams and certifications early.</li>
+                <li>Utilize online resources and courses to build skills.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Placeholder data - in real app, this would be dynamically generated or passed from test results
+        const streamRecommendations = [
+            "Science (PCM/PCB) - Strong analytical and problem-solving skills.",
+            "Commerce - Good business acumen and numerical ability.",
+            "Arts/Humanities - Creative and communication strengths."
+        ];
+
+        const subjectStrengths = [
+            "Mathematics: High proficiency with logical reasoning.",
+            "Science: Good understanding of scientific concepts.",
+            "Languages: Strong communication skills.",
+            "Social Studies: Moderate interest and knowledge."
+        ];
+
+        const careerSuggestions = [
+            "Engineering and Technology fields.",
+            "Business and Finance careers.",
+            "Creative arts, media, and communication.",
+            "Healthcare and allied medical professions."
+        ];
+
+        function populateList(id, items) {
+            const ul = document.getElementById(id);
+            ul.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+        }
+
+        // Initialize lists on page load
+        populateList('streamRecommendations', streamRecommendations);
+        populateList('subjectStrengths', subjectStrengths);
+        populateList('careerSuggestions', careerSuggestions);
+
+        // Filter analysis sections based on dropdown selection
+        function filterAnalysis() {
+            const selected = document.getElementById('analysisType').value;
+            const sections = ['overview', 'stream', 'subjects', 'careers', 'preparation'];
+            sections.forEach(section => {
+                const el = document.getElementById(section);
+                if (el) {
+                    if (section === selected) {
+                        el.style.display = 'block';
+                    } else {
+                        el.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Set initial visible section
+        filterAnalysis();
+    </script>
+</body>
+</html>

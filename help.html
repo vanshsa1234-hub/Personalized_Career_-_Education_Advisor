@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Help Center - Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .help-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .help-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .help-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .help-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .help-content {
+            padding: 3rem 0;
+        }
+
+        .help-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .help-section h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-section h3 {
+            color: #667eea;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .help-section p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .help-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .help-section li {
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .help-section a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .help-section a:hover {
+            text-decoration: underline;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .help-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .help-card h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .help-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .contact-info {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .contact-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .help-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .help-hero p {
+                font-size: 1.1rem;
+            }
+
+            .help-section {
+                padding: 1.5rem;
+            }
+
+            .help-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .help-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎓 Path Finder</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aptitude.html">Aptitude Test</a></li>
+                <li><a href="careers.html">Careers</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="colleges.html">Colleges</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay"></div>
+    <div class="sidebar">
+        <ul class="sidebar-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aptitude.html">Aptitude Test</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="colleges.html">Colleges</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="login.html">Log In</a></li>
+        </ul>
+        <div class="sidebar-buttons">
+            <a href="aptitude.html" class="sidebar-cta">Take Test</a>
+            <a href="login.html" class="sidebar-login">Log In</a>
+        </div>
+    </div>
+
+    <div class="help-hero">
+        <div class="container">
+            <h1>Help Center</h1>
+            <p>Get assistance with using Path Finder and navigating your career journey</p>
+        </div>
+    </div>
+
+    <main class="help-container">
+        <div class="help-content fade-in">
+            <div class="help-section">
+                <h2>📚 Getting Started</h2>
+                <p>Welcome to Path Finder! Here's how to make the most of our platform:</p>
+
+                <h3>Creating Your Account</h3>
+                <ul>
+                    <li>Click on "Register" to create a new account</li>
+                    <li>Fill in your details including current class level</li>
+                    <li>Verify your email to activate your account</li>
+                    <li>Complete your profile for personalized recommendations</li>
+                </ul>
+
+                <h3>Taking the Aptitude Test</h3>
+                <ul>
+                    <li>Navigate to the "Aptitude Test" section</li>
+                    <li>Select your current class (10th or 12th)</li>
+                    <li>Answer all 25 questions honestly and thoughtfully</li>
+                    <li>Review your results and recommended career paths</li>
+                    <li>Save or share your results for future reference</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h2>🎯 Understanding Your Results</h2>
+                <p>Your aptitude test results provide valuable insights into your strengths and interests:</p>
+
+                <div class="help-grid">
+                    <div class="help-card">
+                        <h4>Score Interpretation</h4>
+                        <p>Your scores indicate your aptitude in different areas like logical reasoning, verbal ability, and numerical skills.</p>
+                    </div>
+                    <div class="help-card">
+                        <h4>Career Recommendations</h4>
+                        <p>Based on your scores, we suggest suitable career paths in science, commerce, arts, or other fields.</p>
+                    </div>
+                    <div class="help-card">
+                        <h4>Personalized Roadmap</h4>
+                        <p>Get a customized step-by-step plan to achieve your career goals with timelines and milestones.</p>
+                    </div>
+                    <div class="help-card">
+                        <h4>Resource Suggestions</h4>
+                        <p>Access curated study materials, books, and online courses tailored to your recommended path.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h2>🛠️ Using Our Features</h2>
+
+                <h3>Career Exploration</h3>
+                <ul>
+                    <li>Browse detailed information about various careers</li>
+                    <li>Filter careers by category, salary range, and growth potential</li>
+                    <li>Compare different career options side by side</li>
+                    <li>Save favorite careers to your profile</li>
+                </ul>
+
+                <h3>College Directory</h3>
+                <ul>
+                    <li>Search for colleges by location, course, or ranking</li>
+                    <li>View detailed college profiles with admission criteria</li>
+                    <li>Compare colleges based on fees, facilities, and placement records</li>
+                    <li>Get information about government colleges and scholarships</li>
+                </ul>
+
+                <h3>Study Resources</h3>
+                <ul>
+                    <li>Access free and premium learning materials</li>
+                    <li>Find video lectures, practice tests, and reference books</li>
+                    <li>Get personalized resource recommendations</li>
+                    <li>Track your learning progress</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h2>❓ Frequently Asked Questions</h2>
+
+                <h3>Account & Profile</h3>
+                <ul>
+                    <li><strong>How do I reset my password?</strong> Use the "Forgot Password" link on the login page</li>
+                    <li><strong>Can I change my class level?</strong> Yes, update it in your profile settings</li>
+                    <li><strong>Is my data secure?</strong> We use industry-standard encryption to protect your information</li>
+                </ul>
+
+                <h3>Test & Results</h3>
+                <ul>
+                    <li><strong>Can I retake the aptitude test?</strong> Yes, you can retake it anytime to track your progress</li>
+                    <li><strong>How accurate are the results?</strong> Results are based on scientifically validated assessment methods</li>
+                    <li><strong>Can I share my results?</strong> Yes, you can download and share your career report</li>
+                </ul>
+            </div>
+
+            <div class="contact-info">
+                <h3>Still Need Help?</h3>
+                <p>Our support team is here to assist you with any questions or issues you may have.</p>
+                <a href="contact.html" class="contact-button">Contact Support</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aptitude.html">Aptitude Test</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="colleges.html">Colleges</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="login.html">Log In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; Path Finder - Your Digital Career Guide. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

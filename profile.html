@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Path Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .profile-photo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .camera-overlay {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .camera-overlay:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+        }
+
+        .camera-overlay::before {
+            content: "📷";
+            font-size: 1.2rem;
+        }
+
+        #photo-input {
+            display: none;
+        }
+
+        .profile-info h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .profile-info p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input:disabled {
+            background: #f9f9f9;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        /* Branch Selection */
+        .branch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .branch-card {
+            background: linear-gradient(135deg, #f8f9ff, #fff);
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .branch-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .branch-card.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .branch-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .branch-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .branch-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Aptitude Results */
+        .aptitude-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .aptitude-item {
+            background: linear-gradient(135deg, #f8f9ff, #fff);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .aptitude-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .aptitude-subject {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .aptitude-score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .aptitude-grade {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Achievement Badges */
+        .achievements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.1);
+        }
+
+        /* Save Button */
+        .save-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .profile-card {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem auto;
+                padding: 0 15px;
+            }
+
+            .profile-card,
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .branch-grid,
+            .aptitude-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <div class="logo">🎓 Path Finder</div>
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-photo-container">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSIjNjY3ZWVhIi8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSJ3aGl0ZSIvPgo8ZWxsaXBzZSBjeD0iNzUiIGN5PSIxMjAiIHJ4PSI0MCIgcnk9IjMwIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="Profile Photo" class="profile-photo" id="profilePhoto">
+                <div class="camera-overlay" onclick="document.getElementById('photo-input').click()"></div>
+                <input type="file" id="photo-input" accept="image/*">
+            </div>
+            
+            <div class="profile-info">
+                <h2 id="displayName">Rahul Sharma</h2>
+                <p id="displayLocation">📍 Agra, Uttar Pradesh</p>
+                
+                <div class="quick-stats">
+                    <div class="stat-box">
+                        <span class="stat-number" id="overallScore">85</span>
+                        <span class="stat-label">Overall Score</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="rank">142</span>
+                        <span class="stat-label">Rank</span>
+                    </div>
+                </div>
+                
+                <div class="achievements">
+                    <div class="badge">🏆 Top Performer</div>
+                    <div class="badge">🎯 Goal Setter</div>
+                    <div class="badge">⭐ Rising Star</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Personal Information -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">👤 Personal Information</h3>
+                    <button class="edit-btn" onclick="toggleEdit('personal')">Edit</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="fullName" value="Rahul Sharma" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="email" value="rahul.sharma@email.com" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" id="phone" value="+91 98765 43210" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="location" value="Agra, Uttar Pradesh" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-input" id="dob" value="2005-08-15" disabled>
+                </div>
+                
+                <button class="save-btn" id="personalSave" style="display: none;" onclick="saveSection('personal')">Save Changes</button>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">🎓 Academic Information</h3>
+                    <button class="edit-btn" onclick="toggleEdit('academic')">Edit</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Current Class/Standard</label>
+                    <select class="form-input" id="currentClass" disabled>
+                        <option value="class12">Class 12</option>
+                        <option value="class11">Class 11</option>
+                        <option value="class10">Class 10</option>
+                        <option value="graduate">Graduate</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Stream/Branch</label>
+                    <select class="form-input" id="stream" disabled>
+                        <option value="science">Science</option>
+                        <option value="commerce">Commerce</option>
+                        <option value="arts">Arts/Humanities</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">School/College Name</label>
+                    <input type="text" class="form-input" id="institution" value="St. Xavier's Senior Secondary School" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Current Percentage/CGPA</label>
+                    <input type="text" class="form-input" id="percentage" value="87.5%" disabled>
+                </div>
+                
+                <button class="save-btn" id="academicSave" style="display: none;" onclick="saveSection('academic')">Save Changes</button>
+            </div>
+
+            <!-- Career Branch Selection -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">🎯 Chosen Career Branch</h3>
+                    <button class="edit-btn" onclick="toggleEdit('branch')">Change Branch</button>
+                </div>
+                
+                <div class="branch-grid" id="branchGrid">
+                    <div class="branch-card selected" data-branch="engineering">
+                        <span class="branch-icon">⚙️</span>
+                        <div class="branch-name">Engineering</div>
+                        <div class="branch-desc">Technology & Innovation</div>
+                    </div>
+                    <div class="branch-card" data-branch="medical">
+                        <span class="branch-icon">🏥</span>
+                        <div class="branch-name">Medical</div>
+                        <div class="branch-desc">Healthcare & Medicine</div>
+                    </div>
+                    <div class="branch-card" data-branch="business">
+                        <span class="branch-icon">💼</span>
+                        <div class="branch-name">Business</div>
+                        <div class="branch-desc">Management & Finance</div>
+                    </div>
+                    <div class="branch-card" data-branch="law">
+                        <span class="branch-icon">⚖️</span>
+                        <div class="branch-name">Law</div>
+                        <div class="branch-desc">Legal & Advocacy</div>
+                    </div>
+                    <div class="branch-card" data-branch="arts">
+                        <span class="branch-icon">🎨</span>
+                        <div class="branch-name">Arts & Design</div>
+                        <div class="branch-desc">Creative & Visual</div>
+                    </div>
+                    <div class="branch-card" data-branch="science">
+                        <span class="branch-icon">🔬</span>
+                        <div class="branch-name">Pure Science</div>
+                        <div class="branch-desc">Research & Discovery</div>
+                    </div>
+                </div>
+                
+                <button class="save-btn" id="branchSave" style="display: none;" onclick="saveSection('branch')">Save Selection</button>
+            </div>
+
+            <!-- Aptitude Test Results -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Aptitude Test Results</h3>
+                    <button class="edit-btn" onclick="retakeTest()">Retake Test</button>
+                </div>
+                
+                <div class="aptitude-grid">
+                    <div class="aptitude-item">
+                        <div class="aptitude-subject">Logical Reasoning</div>
+                        <div class="aptitude-score">92</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%;"></div>
+                        </div>
+                        <div class="aptitude-grade">Grade: A+</div>
+                    </div>
+                    
+                    <div class="aptitude-item">
+                        <div class="aptitude-subject">Mathematical Ability</div>
+                        <div class="aptitude-score">88</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 88%;"></div>
+                        </div>
+                        <div class="aptitude-grade">Grade: A</div>
+                    </div>
+                    
+                    <div class="aptitude-item">
+                        <div class="aptitude-subject">Verbal Comprehension</div>
+                        <div class="aptitude-score">85</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                        <div class="aptitude-grade">Grade: A</div>
+                    </div>
+                    
+                    <div class="aptitude-item">
+                        <div class="aptitude-subject">Spatial Intelligence</div>
+                        <div class="aptitude-score">79</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 79%;"></div>
+                        </div>
+                        <div class="aptitude-grade">Grade: B+</div>
+                    </div>
+                    
+                    <div class="aptitude-item">
+                        <div class="aptitude-subject">General Knowledge</div>
+                        <div class="aptitude-score">82</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%;"></div>
+                        </div>
+                        <div class="aptitude-grade">Grade: A-</div>
+                    </div>
+                    
+                    <div class="aptitude-item">
+                        <div class="aptitude-subject">Creative Thinking</div>
+                        <div class="aptitude-score">91</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 91%;"></div>
+                        </div>
+                        <div class="aptitude-grade">Grade: A+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Current edit state
+        let editStates = {
+            personal: false,
+            academic: false,
+            branch: false
+        };
+
+        // Photo upload functionality
+        document.getElementById('photo-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePhoto').src = e.target.result;
+                    showToast('Profile photo updated successfully! ✨');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Toggle edit mode for sections
+        function toggleEdit(section) {
+            const editBtn = document.querySelector(`#${section}Save`);
+            const inputs = document.querySelectorAll(`#${section} .form-input`);
+            
+            if (!editStates[section]) {
+                // Enable edit mode
+                editStates[section] = true;
+                inputs.forEach(input => input.disabled = false);
+                editBtn.style.display = 'block';
+                
+                if (section === 'branch') {
+                    enableBranchSelection();
+                }
+                
+                showToast('Edit mode enabled! Make your changes and save. ✏️');
+            }
+        }
+
+        // Enable branch selection
+        function enableBranchSelection() {
+            const branchCards = document.querySelectorAll('.branch-card');
+            branchCards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    branchCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        // Save section changes
+        function saveSection(section) {
+            const editBtn = document.querySelector(`#${section}Save`);
+            
+            if (section === 'personal') {
+                const inputs = document.querySelectorAll('.content-card:nth-child(1) .form-input');
+                inputs.forEach(input => input.disabled = true);
+                
+                // Update display name and location
+                document.getElementById('displayName').textContent = document.getElementById('fullName').value;
+                document.getElementById('displayLocation').textContent = '📍 ' + document.getElementById('location').value;
+                
+            } else if (section === 'academic') {
+                const inputs = document.querySelectorAll('.content-card:nth-child(2) .form-input');
+                inputs.forEach(input => input.disabled = true);
+                
+            } else if (section === 'branch') {
+                const selected = document.querySelector('.branch-card.selected');
+                if (selected) {
+                    const branchName = selected.querySelector('.branch-name').textContent;
+                    showToast(`Career branch updated to ${branchName}! 🎯`);
+                }
+            }
+            
+            editStates[section] = false;
+            editBtn.style.display = 'none';
+            showToast('Changes saved successfully! 💾');
+        }
+
+        // Retake aptitude test
+        function retakeTest() {
+            if (confirm('Are you sure you want to retake the aptitude test? This will replace your current scores.')) {
+                showToast('Redirecting to aptitude test... 🧠');
+                // In a real app, this would redirect to the test page
+                setTimeout(() => {
+                    alert('This would redirect to the aptitude test page in a real application.');
+                }, 2000);
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Animate progress bars on load
+        window.addEventListener('load', function() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.width = bar.style.width;
+                }, index * 200);
+            });
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.content-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Initialize branch selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const branchCards = document.querySelectorAll('.branch-card');
+            branchCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    if (editStates.branch) {
+                        branchCards.forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                    }
+                });
+            });
+            
+            // Add click effect to buttons
+            document.querySelectorAll('.save-btn, .edit-btn, .back-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+
+        // Add some interactive feedback
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentNode.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentNode.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simulate real-time data updates
+        function updateStats() {
+            const overallScore = document.getElementById('overallScore');
+            const rank = document.getElementById('rank');
+            
+            // Simulate score improvement
+            setInterval(() => {
+                const currentScore = parseInt(overallScore.textContent);
+                if (currentScore < 90) {
+                    overallScore.textContent = currentScore + 1;
+                    
+                    // Update rank inversely
+                    const currentRank = parseInt(rank.textContent);
+                    if (currentRank > 100) {
+                        rank.textContent = currentRank - 2;
+                    }
+                }
+            }, 30000); // Update every 30 seconds
+        }
+
+        // Start stats animation
+        updateStats();
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        // Save current editing section
+                        Object.keys(editStates).forEach(section => {
+                            if (editStates[section]) {
+                                saveSection(section);
+                            }
+                        });
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        toggleEdit('personal');
+                        break;
+                }
+            }
+        });
+
+        // Add smooth scrolling between sections
+        function scrollToSection(sectionIndex) {
+            const cards = document.querySelectorAll('.content-card');
+            if (cards[sectionIndex]) {
+                cards[sectionIndex].scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+
+        // Add section navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add quick navigation
+            const quickNav = document.createElement('div');
+            quickNav.style.cssText = `
+                position: fixed;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: white;
+                padding: 1rem;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                z-index: 99;
+                display: none;
+            `;
+            
+            quickNav.innerHTML = `
+                <div style="margin-bottom: 0.5rem; font-weight: 600; color: #667eea;">Quick Nav</div>
+                <div onclick="scrollToSection(0)" style="cursor: pointer; padding: 0.5rem; border-radius: 8px; margin: 0.25rem 0; transition: all 0.3s;">👤 Personal</div>
+                <div onclick="scrollToSection(1)" style="cursor: pointer; padding: 0.5rem; border-radius: 8px; margin: 0.25rem 0; transition: all 0.3s;">🎓 Academic</div>
+                <div onclick="scrollToSection(2)" style="cursor: pointer; padding: 0.5rem; border-radius: 8px; margin: 0.25rem 0; transition: all 0.3s;">🎯 Career</div>
+                <div onclick="scrollToSection(3)" style="cursor: pointer; padding: 0.5rem; border-radius: 8px; margin: 0.25rem 0; transition: all 0.3s;">📊 Results</div>
+            `;
+            
+            document.body.appendChild(quickNav);
+            
+            // Show/hide on desktop
+            if (window.innerWidth > 968) {
+                quickNav.style.display = 'block';
+            }
+            
+            // Add hover effects to nav items
+            quickNav.querySelectorAll('div:not(:first-child)').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.background = '#f0f0f0';
+                    this.style.transform = 'translateX(-5px)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.background = 'transparent';
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+
+        // Enhanced photo upload with preview and crop simulation
+        document.getElementById('photo-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    showToast('Please select a valid image file! 📷');
+                    return;
+                }
+                
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('Image size should be less than 5MB! 📏');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('profilePhoto');
+                    
+                    // Add loading effect
+                    img.style.filter = 'blur(5px)';
+                    img.style.opacity = '0.5';
+                    
+                    setTimeout(() => {
+                        img.src = e.target.result;
+                        img.style.filter = 'none';
+                        img.style.opacity = '1';
+                        showToast('Profile photo updated successfully! ✨');
+                        
+                        // Add bounce effect
+                        img.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            img.style.transform = 'scale(1)';
+                        }, 300);
+                    }, 500);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Add data validation
+        function validateForm(section) {
+            const inputs = document.querySelectorAll(`.content-card:nth-child(${section === 'personal' ? '1' : '2'}) .form-input`);
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (input.required && !input.value.trim()) {
+                    input.style.borderColor = '#ff4444';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#e0e0e0';
+                }
+            });
+            
+            return isValid;
+        }
+
+        // Enhanced save function with validation
+        const originalSaveSection = saveSection;
+        saveSection = function(section) {
+            if (section === 'personal' || section === 'academic') {
+                if (!validateForm(section)) {
+                    showToast('Please fill in all required fields! ⚠️');
+                    return;
+                }
+            }
+            originalSaveSection(section);
+        };
+
+        // Add auto-save functionality
+        let autoSaveTimeout;
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(() => {
+                    // Show auto-save indicator
+                    const indicator = document.createElement('div');
+                    indicator.textContent = '💾 Auto-saved';
+                    indicator.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: #4caf50;
+                        color: white;
+                        padding: 0.5rem 1rem;
+                        border-radius: 20px;
+                        font-size: 0.9rem;
+                        z-index: 1000;
+                        opacity: 0;
+                        transition: opacity 0.3s;
+                    `;
+                    document.body.appendChild(indicator);
+                    
+                    setTimeout(() => indicator.style.opacity = '1', 100);
+                    setTimeout(() => {
+                        indicator.style.opacity = '0';
+                        setTimeout(() => document.body.removeChild(indicator), 300);
+                    }, 2000);
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>

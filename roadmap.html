@@ -1,0 +1,1813 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Career Roadmap</title>
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border-radius: 15px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .test-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-screen p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .class-selection {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 3rem 0;
+        }
+
+        .class-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .class-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            color: #666;
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Question Interface */
+        .question-screen {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .question-counter {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .option.selected {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .results-header {
+            margin-bottom: 3rem;
+        }
+
+        .results-header h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .score-display {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .score-display h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendations {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .recommendations h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .subject-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .subject-score {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .subject-score h5 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .class-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .class-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .test-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+            }
+
+            .subject-scores {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Additional roadmap-specific styles */
+        .roadmap-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .roadmap-title {
+            font-size: 1.6rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .roadmap-card {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: left;
+        }
+
+        .phase {
+            margin-bottom: 1rem;
+        }
+
+        .phase h5 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase ul {
+            padding-left: 1.2rem;
+            color: #444;
+        }
+
+        .meta {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #666;
+        }
+        
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 3px;
+        }
+
+        .timeline-phase {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .timeline-phase::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #764ba2;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-phase.completed::after {
+            background-color: #4CAF50;
+            border-color: #45a049;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .right::after {
+            left: -16px;
+        }
+
+        .timeline-content {
+            padding: 25px;
+            background-color: white;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+        }
+
+        .timeline-content h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline-content .tasks {
+            margin: 15px 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-checkbox.completed {
+            background: #4CAF50;
+            border-color: #45a049;
+        }
+
+        .task-checkbox.completed::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+
+        .task-text {
+            flex: 1;
+            transition: all 0.2s;
+        }
+
+        .task-item.completed .task-text {
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        .progress-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .progress-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .progress-label {
+            color: #666;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* New styles for enhanced features */
+        .phase h5 {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-btn {
+            margin-left: auto;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .phase.collapsed ul {
+            display: none;
+        }
+
+        .phase li {
+            position: relative;
+            cursor: pointer;
+            padding-left: 2rem;
+        }
+
+        .phase li::before {
+            content: '⭕';
+            position: absolute;
+            left: 0;
+            color: #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .phase li.completed::before {
+            content: '✅';
+            color: #4CAF50;
+        }
+
+        /* Stream color coding */
+        .stream-science { border-left: 4px solid #2196F3; }
+        .stream-commerce { border-left: 4px solid #4CAF50; }
+        .stream-arts { border-left: 4px solid #FF9800; }
+        .stream-law { border-left: 4px solid #9C27B0; }
+
+        /* Exam badges */
+        .exam-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            margin: 0.2rem;
+        }
+
+        /* AI Tips box */
+        .ai-tips {
+            background: linear-gradient(45deg, #FF9800, #F44336);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .ai-tips::before {
+            content: '🤖';
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Resource sidebar styles */
+        .phase-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .phase-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .phase-resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .resource-sidebar {
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .resource-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .resource-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .resource-section h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-link-card {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .resource-link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .resource-link-card.official {
+            border-left: 3px solid #4CAF50;
+        }
+
+        .resource-icon {
+            font-size: 1.2rem;
+            margin-right: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-title {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .resource-type {
+            font-size: 0.75rem;
+            color: #666;
+            display: block;
+        }
+
+        .study-materials {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .study-materials h4 {
+            color: #667eea;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .materials-grid {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .material-card {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .material-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .material-icon {
+            font-size: 1.2rem;
+        }
+
+        .material-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .material-source {
+            font-size: 0.8rem;
+            color: #666;
+            margin-left: auto;
+        }
+
+        .material-card.video { border-left: 3px solid #f44336; }
+        .material-card.book { border-left: 3px solid #4CAF50; }
+        .material-card.practice { border-left: 3px solid #2196F3; }
+        .material-card.course { border-left: 3px solid #FF9800; }
+        .material-card.app { border-left: 3px solid #9C27B0; }
+
+        @media (max-width: 768px) {
+            .phase-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Timeline and tracker styles */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+            margin: 1rem 0;
+        }
+
+        .timeline-phase {
+            position: relative;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            background: #f8f9fa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-phase.left {
+            margin-left: 2rem;
+        }
+
+        .timeline-phase.right {
+            margin-right: 2rem;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+            position: relative;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            color: #333;
+        }
+
+        .tasks {
+            margin-top: 1rem;
+            padding-left: 1.2rem;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+        }
+
+        .task-checkbox {
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .task-checkbox.completed {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .task-text {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-percentage {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Enhanced styles */
+        .resource-link {
+            color: #2196F3;
+            text-decoration: none;
+            padding: 2px 5px;
+            border-radius: 4px;
+            background: rgba(33, 150, 243, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .resource-link:hover {
+            background: rgba(33, 150, 243, 0.2);
+            text-decoration: underline;
+        }
+
+        .exam-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 4px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .timeline-content {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            opacity: 0.5;
+        }
+
+        .task-item {
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .task-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .task-item.completed {
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .task-due-date {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .task-priority {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .task-priority.high {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+        }
+
+        .task-priority.medium {
+            background: rgba(255, 152, 0, 0.1);
+            color: #ff9800;
+        }
+
+        .milestone-marker {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4CAF50;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="nav">
+        <div class="logo">Roadmap Builder</div>
+        <a href="#" class="back-btn" onclick="history.back()">Back</a>
+      </div>
+    </header>
+
+    <main class="test-container" role="main">
+      <section class="welcome-screen">
+        <h1 id="pageTitle">Career Roadmap</h1>
+        <p id="pageSub">Detailed, step-by-step roadmap for the recommended path</p>
+      </section>
+
+      <section class="roadmap-card" id="roadmapCard">
+        <div class="roadmap-header">
+          <div class="roadmap-title" id="roadmapTitle">Loading roadmap...</div>
+          <div class="meta" id="roadmapMeta"></div>
+          <div class="roadmap-controls">
+            <button onclick="printRoadmap()" class="control-btn"><span>🖨️</span> Print/Save PDF</button>
+            <button onclick="shareRoadmap()" class="control-btn"><span>🔗</span> Share</button>
+            <div class="zoom-controls">
+              <button onclick="adjustZoom(-0.1)" class="control-btn">➖</button>
+              <button onclick="adjustZoom(0.1)" class="control-btn">➕</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="roadmapContent">
+          <!-- Roadmap phases inserted here -->
+        </div>
+      </section>
+
+      <section style="margin-top:1rem;text-align:center;">
+        <small style="color:#555">Tip: call <code>renderRoadmap(subjectName)</code> from your test page after you compute the recommended subject. Example: <code>renderRoadmap('Science (PCM/PCB)')</code></small>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Helper functions
+    function getPhaseIcon(title) {
+      if (title.includes('Immediate')) return '🎯';
+      if (title.includes('Short term')) return '⏳';
+      if (title.includes('Class')) return '📚';
+      if (title.includes('Practical')) return '🔬';
+      if (title.includes('After')) return '🎓';
+      if (title.includes('Long-term')) return '🚀';
+      if (title.includes('Resources')) return '📚';
+      if (title.includes('Overview')) return '🎯';
+      return '✨';
+    }
+
+    function clearRoadmap() {
+      document.getElementById('roadmapTitle').textContent = '';
+      document.getElementById('roadmapMeta').textContent = '';
+      document.getElementById('roadmapContent').innerHTML = '';
+    }
+
+    function toggleTask(taskId, checkbox) {
+      checkbox.classList.toggle('completed');
+      checkbox.parentElement.classList.toggle('completed');
+      
+      // Save progress
+      const subject = document.getElementById('roadmapTitle').textContent;
+      saveProgress(subject);
+      updateProgressPercentage();
+    }
+
+    function updateProgressPercentage() {
+      const total = document.querySelectorAll('.task-checkbox').length;
+      const completed = document.querySelectorAll('.task-checkbox.completed').length;
+      const percentage = Math.round((completed / total) * 100);
+      
+      const progressEl = document.querySelector('.progress-percentage');
+      if (progressEl) {
+        progressEl.textContent = `${percentage}%`;
+      }
+    }
+
+    function saveProgress(subject) {
+      const progress = {};
+      document.querySelectorAll('.task-item').forEach((task, index) => {
+        progress[index] = task.classList.contains('completed');
+      });
+      localStorage.setItem(`roadmap_progress_${subject}`, JSON.stringify(progress));
+    }
+
+    function loadProgress(subject) {
+      const saved = localStorage.getItem(`roadmap_progress_${subject}`);
+      if (saved) {
+        const progress = JSON.parse(saved);
+        document.querySelectorAll('.task-item').forEach((task, index) => {
+          if (progress[index]) {
+            task.classList.add('completed');
+            task.querySelector('.task-checkbox').classList.add('completed');
+          }
+        });
+      }
+    }
+
+    // Control functions
+    let currentZoom = 1;
+    
+    function printRoadmap() {
+      window.print();
+    }
+    
+    function shareRoadmap() {
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({
+          title: document.getElementById('roadmapTitle').textContent,
+          text: 'Check out my career roadmap!',
+          url: url
+        });
+      } else {
+        // Fallback to copy to clipboard
+        navigator.clipboard.writeText(url).then(() => {
+          alert('Link copied to clipboard!');
+        });
+      }
+    }
+    
+    function adjustZoom(delta) {
+      currentZoom = Math.max(0.5, Math.min(2, currentZoom + delta));
+      document.querySelector('.timeline').style.transform = `scale(${currentZoom})`;
+    }
+
+    // Detailed roadmaps for each subject. Call renderRoadmap('Subject Name') to display.
+    const roadmaps = {
+      // Class 10 streams
+      "Science (PCM/PCB)": {
+        level: 'Class 10 — Choose Science (PCM/PCB)',
+        overview: 'Solid foundation in Maths + Science, pathway to Engineering, Medicine, or Research. This roadmap covers immediate steps (next 12 months), class 11–12 focus, exam prep, practical projects and long-term career steps.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Strengthen fundamentals: revise class 9–10 Maths and Science NCERT thoroughly.',
+              'Start daily practice: 45–60 mins of problem solving (maths) and 30–45 mins conceptual review for science.',
+              "Join a basic online course or weekend coaching for logical reasoning and math basics if you're weak in topics like algebra or trigonometry.",
+              'Do 1 small project or experiment: a physics experiment or basic coding project to build confidence.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months — before Class 11)',
+            bullets: [
+              'Read ahead: preview the Class 11 syllabus for Physics/Maths/Chemistry (or Biology for PCB).',
+              'Start problem-solving habit: push from chapter exercises to previous years JEE/NEET foundation questions.',
+              'Develop study routines: weekly topic plan + monthly mock mini-tests.',
+              'Build soft foundations: time management, note-taking and error-log for weak topics.'
+            ]
+          },
+          {
+            title: 'Class 11 (Year 1) — Building foundations',
+            bullets: [
+              'Follow NCERT thoroughly; solve end-of-chapter problems fully.',
+              'Enroll in JEE/NEET foundation course or structured self-study plan depending on budget.',
+              'Solve topic-wise question banks and maintain a "mistakes notebook".',
+              'Start basic coding and data skills (Python) if interested in CS/AI later.',
+              'Engage in clubs: science club, coding club, mathematics olympiad training.'
+            ]
+          },
+          {
+            title: 'Class 12 (Year 2) — Exam-focused phase',
+            bullets: [
+              'Shift to exam pattern practice: timed full-syllabus mocks for JEE/NEET/Boards.',
+              'Revise core concepts weekly; prioritize high-weight topics and weak areas.',
+              'Take at least 2–3 full-length mock tests monthly and analyze thoroughly.',
+              'For PCB: do dissection/lab work and clinical exposure if possible; for PCM: project-based learning and competitive programming practice.'
+            ]
+          },
+          {
+            title: 'Practical/Portfolio (Parallel activities)',
+            bullets: [
+              'Science fair projects, research mini-projects, internships at labs (summer).',
+              'Open-source projects, Github portfolio for CS/AI interests.',
+              'Online certifications: Coursera/edX short courses in data science, electronics, biotechnology basics.'
+            ]
+          },
+          {
+            title: 'After Class 12 — Short term (First 1–2 years)',
+            bullets: [
+              'Join undergraduate program: B.Tech/BSc/MBBS/BSc Hons based on results and exam rank.',
+              'Focus on internships, small research assistant roles, or industry projects.',
+              'Consider entrance coaching or reattempt strategy only after careful analysis (gap year planning).'
+            ]
+          },
+          {
+            title: 'Long-term career timeline (3–10 years)',
+            bullets: [
+              'Specialize via higher studies: M.Tech, MS, MD or research programs depending on interest.',
+              'Work in engineering, healthcare, research labs, data science or startups.',
+              'Keep building a professional network, attend conferences and publish small papers if research-oriented.'
+            ]
+          }
+        ],
+        resources: [
+          'NCERT textbooks + H.C. Verma (Physics), R.D. Sharma (Maths) — for practice',
+          'Online platforms: Khan Academy, Unacademy, BYJU’S, Coursera for supplementary lessons',
+          'Practice portals: Brilliant, CodeChef (for programming), Toppr, Aakash Digital for mocks'
+        ]
+      },
+
+      "Commerce": {
+        level: 'Class 10 — Choose Commerce',
+        overview: 'Commerce focuses on business, finance and numerical reasoning. Roadmap spans skill-building, certifications, internships and professional qualification pathways such as CA or BBA.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Start basic accounting: understand double-entry bookkeeping and basic ledger entries.',
+              'Learn spreadsheet basics (Excel/Google Sheets): formulas, pivot tables, basic charts.',
+              'Read simple finance/business articles or books (e.g., "Rich Dad Poor Dad" critically) and follow business news weekly.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Take an online course on accounting basics or financial literacy.',
+              'Start a small project: personal budget tracker or mini business plan.',
+              'Volunteer for school events in finance roles (treasurer, accounts) to learn practicals.'
+            ]
+          },
+          {
+            title: 'Class 11–12 — Core academic phase',
+            bullets: [
+              'Focus on Accountancy, Business Studies, and Economics; practice numerical problems regularly.',
+              'If aiming for CA: consider Foundation-level orientation; for BBA: build communication & presentation skills.',
+              'Participate in commerce competitions, stock market simulations or business model contests.'
+            ]
+          },
+          {
+            title: 'Professional prep & alternatives',
+            bullets: [
+              'For CA/CS/CMA: plan the Foundation/Professional exam path and internships with CA firms.',
+              'For B.Com/BBA: look for internships in small firms, bookkeeping roles or startups.',
+              'Learn basic coding for finance: Python for data analysis (pandas) helps in modern finance roles.'
+            ]
+          },
+          {
+            title: 'After Class 12 — First steps',
+            bullets: [
+              'Choose between professional qualification (CA/CS/CMA) or degree (B.Com/BBA).',
+              'Join internships, short-term finance projects or part-time roles to get work experience.',
+              'Build a certification stack: Excel, Tally, GST basics, digital marketing (if entrepreneurship).'
+           ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Senior roles in finance: Financial Analyst, Chartered Accountant, CFO (long-term).',
+              'Alternatives: Entrepreneurship, Investment Banking, Consulting, Academia.'
+            ]
+          }
+        ],
+        resources: [
+          'Basic accounting courses on Coursera/Edx',
+          'Excel + Tally tutorials, NCFM modules for finance basics',
+          'Books: Principles of Accounting (school-level) and introductory Economics texts'
+        ]
+      },
+
+      "Arts/Humanities": {
+        level: 'Class 10 — Choose Arts/Humanities',
+        overview: 'Humanities emphasise analysis, expression and societal understanding. Roadmap includes building research, writing, debate skills and portfolios for creative fields.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Read widely: newspapers, non-fiction, biographies and literature to build background knowledge.',
+              'Start a writing habit: weekly essays, book reviews or blogs.',
+              'Join debate, drama, theatre or art clubs to explore strengths.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Create a portfolio for creative pursuits (artworks, writing samples, recorded performances).',
+              'Enroll in short courses: creative writing, basic sociology/politics introductions, or digital storytelling.',
+              'Start volunteering or internships with NGOs if interested in social work.'
+            ]
+          },
+          {
+            title: 'Class 11–12 — Academic & skill phase',
+            bullets: [
+              'Specialize in chosen subjects (History, Political Science, Psychology, Sociology, Literature).',
+              'Practice source-based answers, long-form essays and research methodology basics.',
+              'Participate in Model UN, youth parliaments, internships with media houses or NGOs.'
+            ]
+          },
+          {
+            title: 'After Class 12 — Pathways',
+            bullets: [
+              'Undergraduate options: BA Honours, BFA, Journalism, Social Work, Psychology programmes.',
+              'For competitive public service ambitions, start a foundation course for UPSC or state PSCs.',
+              'For creative careers, apply to art & design colleges (portfolio-heavy).'
+            ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Careers: Civil Services, Law, Media & Journalism, Academia, Research, Creative Industries.',
+              'Build a body of work: publish, present, or produce performances/portfolio over 3–5 years.'
+            ]
+          }
+        ],
+        resources: [
+          'Newspapers and curated current affairs like The Hindu or Indian Express',
+          'Online writing courses, Coursera/edX humanities electives, creative portfolios on Behance'
+        ]
+      },
+
+      // Class 12 career choices
+      "Medicine/Healthcare": {
+        level: 'Class 12 — Medicine/Healthcare',
+        overview: 'Pathway to medical professions; focus on deep biology and clinical exposure. This roadmap includes NEET preparation, lab experience and long-term medical career planning.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Strengthen NCERT Biology and Chemistry fundamentals.',
+              'Start a NEET prep schedule if aiming for medical entrance: daily revision + weekly tests.',
+              'Seek voluntary or observational exposure at clinics/hospitals if available.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Take timed mock tests and practice previous years NEET papers.',
+              'Master diagrams and practical lab skills; maintain concise notes for recall.',
+              'Attend small workshops on first aid, basic life support or public health programmes.'
+            ]
+          },
+          {
+            title: 'Class 12 / Exam year',
+            bullets: [
+              'Intensive revision & topic-wise test series; prioritize high-yield topics in Biology.',
+              'Participate in peer study groups for discussion-based learning and doubt clearing.',
+              'Plan exam day strategy: time allocation, question selection, and stress management.'
+            ]
+          },
+          {
+            title: 'After Class 12',
+            bullets: [
+              'Join MBBS/BDS or allied healthcare courses depending on rank; consider private options carefully.',
+              'Engage in internships, research in biomedical labs, or public health NGOs during undergrad.',
+              'Explore specializations: surgery, internal medicine, pediatrics, public health, research.'
+            ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Postgraduate training (MD/MS) or specialized diplomas; consider fellowships abroad for niche areas.',
+              'Research: publish clinical studies or join public health initiatives.',
+              'Alternative careers: health policy, medical technology, biotech startups.'
+            ]
+          }
+        ],
+        resources: [
+          'NCERT Biology + Reference guides for NEET (MTG, Trueman)',
+          'Online NEET coaching platforms and extensive test series',
+          'Clinical volunteering and public health internships'
+        ]
+      },
+
+      "Business/Management": {
+        level: 'Class 12 — Business/Management',
+        overview: 'Roadmap for young managers and entrepreneurs: academic focus, leadership experiences, internships and degree/entrance planning for BBA/MBA track.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Start a small side project or micro-business to learn basics of sales, pricing and customer feedback.',
+              'Improve communication skills: public speaking, presentations, and basic reporting.',
+              'Begin reading foundational business books and follow business news.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Prepare for BBA entrances (IPMAT, DU-JAT) if applicable with mock tests.',
+              'Apply for internships at startups or small firms to learn practical business operations.',
+              'Learn basic analytics: Excel, Google Analytics, introductory SQL or Python for data.'
+            ]
+          },
+          {
+            title: 'After Class 12 — Degree phase',
+            bullets: [
+              'Pursue BBA/B.Com/BBM or specialized business degrees; leverage internships and projects.',
+              'Join college clubs, entrepreneurship cells and internship programs.',
+              'Plan for MBA early: An internship-rich profile helps for top schools later.'
+            ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Roles: Business Analyst, Product Manager, Consultant, Entrepreneur. ',
+              'Consider higher studies: MBA (CAT/GRE/GMAT) or specialized masters abroad.',
+              'Start scaling a venture or join corporate leadership tracks through rotations.'
+            ]
+          }
+        ],
+        resources: [
+          'Books: Lean Startup, The Hard Thing About Hard Things (for entrepreneurs)',
+          'Courses: basic finance & analytics on Coursera, Google digital garage',
+          'Platforms: Internshala, LinkedIn for internships and networking'
+        ]
+      },
+
+      "Engineering/Technology": {
+        level: 'Class 12 — Engineering/Technology',
+        overview: 'Roadmap for engineering aspirants: clear JEE/state exams, build programming & project skills, internships and branch selection strategy.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Strengthen core Math & Physics fundamentals and go beyond rote learning to application.',
+              'Start programming basics (Python) and simple projects (calculator, small scripts).',
+              'Schedule weekly problem-solving sessions (previous years and topic-wise questions).'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Join JEE/State CET coaching or follow a disciplined self-study timetable with topic milestones.',
+              'Take monthly full-length mocks and maintain a subject-wise performance log.',
+              'Begin small hardware/software projects: Arduino, Raspberry Pi, web app etc.'
+            ]
+          },
+          {
+            title: 'After Class 12 — College phase',
+            bullets: [
+              'Choose branch based on interest and strengths; aim for internships in semester 2–4.',
+              'Participate in hackathons, open-source contributions and research groups.',
+              'Consider higher studies (M.Tech/MS) or placement routes depending on goals.'
+            ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Roles: Software Engineer, Systems Designer, Data Scientist, Embedded Systems Engineer.',
+              'Build specialization through certifications, M.Tech/MS or industry experience.',
+              'Network via conferences, GitHub, technical blogs and professional communities.'
+            ]
+          }
+        ],
+        resources: [
+          'Competitive programming sites: CodeChef, Codeforces',
+          'Online project platforms: GitHub, Coursera specializations, freeCodeCamp'
+        ]
+      },
+
+      "Arts/Design": {
+        level: 'Class 12 — Arts/Design',
+        overview: 'Creative roadmap: build portfolio, prepare for entrance tests, internships in studios and gradual skill-building in software and theory.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Start a portfolio: 10–15 high-quality pieces (sketches, designs, performances) that show range and depth.',
+              'Learn basic digital tools: Photoshop, Illustrator, Blender depending on interest.',
+              'Attend workshops or short courses to refine technique and process.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Prepare for entrances like NID/NIFT with mock tests and design thinking exercises.',
+              'Create case-studies for each portfolio piece describing your process, intent and learnings.',
+              'Apply for internships at design studios or local media houses.'
+            ]
+          },
+          {
+            title: 'After Class 12 — Degree phase',
+            bullets: [
+              'Pursue B.Des/BFA/Animation/Film/Performing Arts depending on selected path.',
+              'Keep adding to portfolio: client projects, freelance work, college projects.',
+              'Network in creative communities and take part in exhibitions, shows and festivals.'
+            ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Careers: Designer, Creative Director, Animator, Filmmaker, Performing Artist.',
+              'Freelance or agency work, start your studio or join established houses.'
+            ]
+          }
+        ],
+        resources: [
+          'Behance, Dribbble for portfolio inspiration',
+          'Online courses: Udemy, Coursera for specific tools (Adobe, Blender)'
+        ]
+      },
+
+      "Law/Public Service": {
+        level: 'Class 12 — Law/Public Service',
+        overview: 'Roadmap covers legal foundation, CLAT/AILET prep or UPSC foundation, debating & internships for courtroom/policy exposure.',
+        phases: [
+          {
+            title: 'Immediate (Now — next 3–6 months)',
+            bullets: [
+              'Read basic Indian Constitution summaries and landmark case studies.',
+              'Join debate and mock-trial clubs to build argumentation and public speaking skills.',
+              'Start a habit of reading editorials and monthly current-affairs digests.'
+            ]
+          },
+          {
+            title: 'Short term (6–12 months)',
+            bullets: [
+              'Prepare for CLAT/AILET with practice on logical reasoning, legal aptitude, and English.',
+              'Take part in internships with local legal aid clinics or NGO legal cells.',
+              'Build a reading list: constitutional law primers, law basics, and socio-economic policy texts.'
+            ]
+          },
+          {
+            title: 'After Class 12 — Degree phase',
+            bullets: [
+              'Enroll in 5-year integrated law program (BA LLB) or 3-year LLB after graduation.',
+              'Intern with law firms, courts, or policy think-tanks; join moot court competitions.',
+              'For public service, start UPSC foundational preparation alongside graduation if aiming for civil services.'
+            ]
+          },
+          {
+            title: 'Long-term career timeline',
+            bullets: [
+              'Career options: Litigation, Corporate Law, Judiciary, Policy Research, Civil Services.',
+              'Gain courtroom experience, publish legal notes, and consider higher studies (LLM) or judicial exams.'
+            ]
+          }
+        ],
+        resources: [
+          'CLAT preparation portals, legal basics books and law school resources',
+          'Moot court, debate and internship opportunities through local law colleges'
+        ]
+      }
+    };
+
+    function clearRoadmap() {
+      document.getElementById('roadmapTitle').textContent = '';
+      document.getElementById('roadmapMeta').textContent = '';
+      document.getElementById('roadmapContent').innerHTML = '';
+    }
+
+    function getStudyMaterials(phaseTitle, subject) {
+      const materials = {
+        'Science (PCM/PCB)': {
+          'Immediate': [
+            { icon: '📚', title: 'NCERT Class 10 Science', link: 'https://ncert.nic.in/textbook.php?jesc1=0-16', type: 'book', source: 'NCERT' },
+            { icon: '🎥', title: 'Physics Basics', link: 'https://www.youtube.com/c/PhysicsWallah', type: 'video', source: 'Physics Wallah' },
+            { icon: '📝', title: 'Maths Practice', link: 'https://www.khanacademy.org/math', type: 'practice', source: 'Khan Academy' }
+          ],
+          'Short term': [
+            { icon: '📚', title: 'HC Verma Physics', link: 'https://www.amazon.in/Concept-Physics-Part-1-2018-2019-Session/dp/8177091875', type: 'book', source: 'Amazon' },
+            { icon: '🎥', title: 'JEE Foundation', link: 'https://www.youtube.com/c/UnacademyJEE', type: 'video', source: 'Unacademy' },
+            { icon: '💻', title: 'Online Tests', link: 'https://www.embibe.com', type: 'practice', source: 'Embibe' }
+          ],
+          'Class 11': [
+            { icon: '📚', title: 'RD Sharma Maths', link: 'https://www.amazon.in/Mathematics-Class-11-R-Sharma/dp/8193663025', type: 'book', source: 'Amazon' },
+            { icon: '🎥', title: 'Chemistry Lectures', link: 'https://www.youtube.com/c/Vedantu', type: 'video', source: 'Vedantu' },
+            { icon: '📱', title: 'NCERT Solutions App', link: 'https://play.google.com/store/apps/details?id=com.doubtnut', type: 'app', source: 'Doubtnut' }
+          ]
+        },
+        'Commerce': {
+          'Immediate': [
+            { icon: '📊', title: 'Basic Accounting', link: 'https://www.coursera.org/learn/accounting-basics', type: 'course', source: 'Coursera' },
+            { icon: '🎥', title: 'Excel Tutorials', link: 'https://www.youtube.com/c/ExcelCampus', type: 'video', source: 'Excel Campus' },
+            { icon: '📚', title: 'Business News', link: 'https://economictimes.indiatimes.com', type: 'news', source: 'Economic Times' }
+          ],
+          'Class 11-12': [
+            { icon: '📚', title: 'TS Grewal Accountancy', link: 'https://www.amazon.in/Problems-Solutions-Accountancy-Class-12-Grewal/dp/8193663076', type: 'book', source: 'Amazon' },
+            { icon: '🎥', title: 'Economics Lectures', link: 'https://www.youtube.com/c/ManzoorSir', type: 'video', source: 'Commerce Guru' },
+            { icon: '💼', title: 'CA Foundation', link: 'https://www.icai.org', type: 'resource', source: 'ICAI' }
+          ]
+        },
+        'Medicine/Healthcare': {
+          'Immediate': [
+            { icon: '📚', title: 'NCERT Biology', link: 'https://ncert.nic.in/textbook.php?kebo1=0-16', type: 'book', source: 'NCERT' },
+            { icon: '🎥', title: 'NEET Lectures', link: 'https://www.youtube.com/c/Unacademy', type: 'video', source: 'Unacademy' },
+            { icon: '🔬', title: 'Virtual Lab', link: 'https://www.labxchange.org', type: 'practice', source: 'LabXchange' }
+          ],
+          'Class 12': [
+            { icon: '📚', title: 'Trueman Biology', link: 'https://www.amazon.in/Truemans-Biology-NEET-2020-Set/dp/9390130158', type: 'book', source: 'Amazon' },
+            { icon: '🎥', title: 'Medical Concepts', link: 'https://www.khanacademy.org/science/health-and-medicine', type: 'video', source: 'Khan Academy' },
+            { icon: '📱', title: 'NEET Prep App', link: 'https://play.google.com/store/apps/details?id=com.allen.digital', type: 'app', source: 'Allen' }
+          ]
+        }
+      };
+
+      // Get materials for the subject and phase, or return default materials
+      const subjectMaterials = materials[subject] || {};
+      const phaseMaterials = subjectMaterials[phaseTitle] || [
+        { icon: '📚', title: 'Online Resources', link: 'https://www.coursera.org', type: 'course', source: 'Coursera' },
+        { icon: '🎥', title: 'Video Lectures', link: 'https://www.youtube.com', type: 'video', source: 'YouTube' },
+        { icon: '📱', title: 'Study Apps', link: 'https://play.google.com', type: 'app', source: 'Play Store' }
+      ];
+
+      return phaseMaterials;
+    }
+
+    function renderRoadmap(subject) {
+      clearRoadmap();
+      const data = roadmaps[subject];
+      if (!data) {
+        document.getElementById('roadmapTitle').textContent = 'Roadmap not found';
+        return;
+      }
+
+      document.getElementById('roadmapTitle').textContent = subject;
+      document.getElementById('roadmapMeta').textContent = data.level;
+
+      const container = document.getElementById('roadmapContent');
+      
+      // Add progress tracker
+      const progressDiv = document.createElement('div');
+      progressDiv.className = 'progress-indicator';
+      progressDiv.innerHTML = `
+        <div class="progress-percentage">0%</div>
+        <div class="progress-label">Completed</div>
+      `;
+      container.appendChild(progressDiv);
+
+      // Create timeline container
+      const timeline = document.createElement('div');
+      timeline.className = 'timeline';
+      
+      // Overview section
+      const overviewPhase = document.createElement('div');
+      overviewPhase.className = 'timeline-phase left';
+      overviewPhase.innerHTML = `
+        <div class="timeline-content">
+          <h3>🎯 Overview</h3>
+          <p>${data.overview || ''}</p>
+        </div>
+      `;
+      timeline.appendChild(overviewPhase);
+
+      // Add phases to timeline
+      data.phases.forEach((phase, index) => {
+        const phaseDiv = document.createElement('div');
+        phaseDiv.className = `timeline-phase ${index % 2 === 0 ? 'right' : 'left'}`;
+        
+        const content = document.createElement('div');
+        content.className = 'timeline-content';
+        
+        // Add phase icon and title with study materials
+        const icon = getPhaseIcon(phase.title);
+        const studyMaterials = getPhaseResources(phase.title, subject);
+        
+        content.innerHTML = `
+          <div class="phase-content">
+            <div class="phase-main">
+              <h3>${icon} ${phase.title}</h3>
+              ${phase.title.includes('Exam') || phase.title.includes('After Class') ? '<div class="milestone-marker"></div>' : ''}
+            </div>
+            <div class="phase-resources">
+              <div class="resource-section">
+                <h4>📚 Essential Resources</h4>
+                ${studyMaterials.essential.map(res => `
+                  <a href="${res.link}" target="_blank" class="resource-link-card official">
+                    <span class="resource-icon">${res.icon}</span>
+                    <div class="resource-info">
+                      <span class="resource-title">${res.title}</span>
+                      <span class="resource-type">${res.type}</span>
+                    </div>
+                  </a>
+                `).join('')}
+              </div>
+              <div class="resource-section">
+                <h4>🌟 Additional Resources</h4>
+                ${studyMaterials.additional.map(res => `
+                  <a href="${res.link}" target="_blank" class="resource-link-card">
+                    <span class="resource-icon">${res.icon}</span>
+                    <div class="resource-info">
+                      <span class="resource-title">${res.title}</span>
+                      <span class="resource-type">${res.type}</span>
+                    </div>
+                  </a>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add tasks
+        const tasks = document.createElement('div');
+        tasks.className = 'tasks';
+        phase.bullets.forEach((bullet, bulletIndex) => {
+          const taskId = `task-${index}-${bulletIndex}`;
+          const taskDiv = document.createElement('div');
+          taskDiv.className = 'task-item';
+          
+          // Add badges for exams and certifications
+          let bulletText = bullet;
+          const exams = ['JEE', 'NEET', 'CAT', 'GATE', 'GRE', 'IELTS', 'UPSC', 'CLAT', 'NIFT'];
+          exams.forEach(exam => {
+            if (bullet.includes(exam)) {
+              bulletText = bullet.replace(exam, `<span class="exam-badge">${exam}</span>`);
+            }
+          });
+          
+          // Add resource links
+          const resources = {
+            'NCERT': 'https://ncert.nic.in/',
+            'Khan Academy': 'https://www.khanacademy.org/',
+            'Coursera': 'https://www.coursera.org/',
+            'GitHub': 'https://github.com/',
+            'LinkedIn': 'https://www.linkedin.com/'
+          };
+          Object.keys(resources).forEach(resource => {
+            if (bullet.includes(resource)) {
+              bulletText = bulletText.replace(resource, `<a href="${resources[resource]}" target="_blank" class="resource-link">${resource}</a>`);
+            }
+          });
+          
+          taskDiv.innerHTML = `
+            <div class="task-checkbox" onclick="toggleTask('${taskId}', this)"></div>
+            <div class="task-text">${bulletText}</div>
+          `;
+          tasks.appendChild(taskDiv);
+        });
+        content.appendChild(tasks);
+        phaseDiv.appendChild(content);
+        timeline.appendChild(phaseDiv);
+      });
+
+      container.appendChild(timeline);
+      
+      // Load saved progress
+      loadProgress(subject);
+      updateProgressPercentage();
+    }
+
+    function getStreamClass(subject) {
+      if (subject.includes('Science') || subject.includes('Engineering')) return 'stream-science';
+      if (subject.includes('Commerce') || subject.includes('Business')) return 'stream-commerce';
+      if (subject.includes('Arts')) return 'stream-arts';
+      if (subject.includes('Law')) return 'stream-law';
+      return '';
+    }
+
+    function getAITip(subject) {
+      const tips = {
+        'Science (PCM/PCB)': '🤖 Your strong analytical scores suggest you\'d excel in science! Focus on math fundamentals for a solid foundation.',
+        'Engineering/Technology': '🤖 Your problem-solving skills are impressive! Consider exploring coding through free online courses.',
+        'Commerce': '🤖 Your business acumen stands out! Try starting a small project to gain practical experience.',
+        'Arts/Humanities': '🤖 Your creative thinking is remarkable! Building a portfolio will be key to your success.',
+        'Medicine/Healthcare': '🤖 Your empathy scores are high! Consider volunteering at healthcare facilities.',
+        'Law/Public Service': '🤖 Your analytical and verbal skills are strong! Try participating in debates.',
+      };
+      return tips[subject] || '🤖 Keep exploring your interests and strengths!';
+    }
+
+    // Function to load roadmap from URL parameters
+    function loadRoadmapFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const subject = urlParams.get('subject');
+      if (subject) {
+        renderRoadmap(decodeURIComponent(subject));
+      } else {
+        document.getElementById('roadmapTitle').textContent = 'Please select a subject';
+        document.getElementById('roadmapContent').innerHTML = `
+          <div style="text-align: center; padding: 2rem;">
+            <p style="color: #666; margin-bottom: 1rem;">Complete the aptitude test to get your personalized roadmap</p>
+            <a href="aptitude.html" class="back-btn" style="text-decoration: none;">Take Aptitude Test</a>
+          </div>
+        `;
+      }
+    }
+
+    // Load roadmap when page loads
+    loadRoadmapFromUrl();
+
+    function getPhaseResources(phase, subject) {
+      const resources = {
+        'Science (PCM/PCB)': {
+          essential: [
+            { icon: '📚', title: 'NCERT Science & Maths', link: 'https://ncert.nic.in/textbook.php', type: 'Official', source: 'NCERT' },
+            { icon: '🎯', title: 'NTA JEE Main', link: 'https://jeemain.nta.nic.in/', type: 'Official', source: 'NTA' },
+            { icon: '⚕️', title: 'NTA NEET', link: 'https://neet.nta.nic.in/', type: 'Official', source: 'NTA' },
+            { icon: '🎥', title: 'Khan Academy - Science', link: 'https://www.khanacademy.org/science', type: 'Video Lectures', source: 'Free' },
+            { icon: '📝', title: 'PhysicsWallah', link: 'https://www.youtube.com/c/PhysicsWallah', type: 'Video Lectures', source: 'Free' }
+          ],
+          additional: [
+            { icon: '📖', title: 'HC Verma Physics', link: '#', type: 'Reference Book', source: 'Recommended' },
+            { icon: '📊', title: 'RD Sharma Maths', link: '#', type: 'Practice Book', source: 'Recommended' },
+            { icon: '🧪', title: 'Virtual Labs', link: 'https://www.vlab.co.in', type: 'Interactive', source: 'Free' }
+          ]
+        },
+        'Commerce': {
+          essential: [
+            { icon: '📚', title: 'NCERT Economics & Accounts', link: 'https://ncert.nic.in/textbook.php', type: 'Official', source: 'NCERT' },
+            { icon: '💼', title: 'ICAI Resources', link: 'https://www.icai.org', type: 'Official', source: 'ICAI' },
+            { icon: '📋', title: 'ICSI Materials', link: 'https://www.icsi.edu', type: 'Official', source: 'ICSI' },
+            { icon: '🎯', title: 'CMA India', link: 'https://icmai.in', type: 'Official', source: 'ICMAI' },
+            { icon: '📊', title: 'Accounting Basics', link: 'https://www.coursera.org/learn/accounting-basics', type: 'Course', source: 'Coursera' }
+          ],
+          additional: [
+            { icon: '💰', title: 'Trading Basics', link: 'https://zerodha.com/varsity', type: 'Free Course', source: 'Zerodha' },
+            { icon: '📰', title: 'Business News', link: 'https://economictimes.indiatimes.com', type: 'News', source: 'ET' }
+          ]
+        },
+        'Arts/Humanities': {
+          essential: [
+            { icon: '📚', title: 'NCERT Social Sciences', link: 'https://ncert.nic.in/textbook.php', type: 'Official', source: 'NCERT' },
+            { icon: '📰', title: 'The Hindu', link: 'https://www.thehindu.com', type: 'News', source: 'Daily' },
+            { icon: '📰', title: 'Indian Express', link: 'https://indianexpress.com', type: 'News', source: 'Daily' },
+            { icon: '🎓', title: 'NPTEL Humanities', link: 'https://nptel.ac.in/courses/109', type: 'Lectures', source: 'Free' }
+          ],
+          additional: [
+            { icon: '✍️', title: 'Writing Course', link: 'https://www.coursera.org/learn/writing-editing', type: 'Course', source: 'Coursera' },
+            { icon: '🎨', title: 'Digital Arts', link: 'https://www.behance.net/galleries', type: 'Gallery', source: 'Behance' }
+          ]
+        },
+        'Medicine/Healthcare': {
+          essential: [
+            { icon: '⚕️', title: 'NEET Official', link: 'https://neet.nta.nic.in', type: 'Official', source: 'NTA' },
+            { icon: '🏥', title: 'AIIMS Resources', link: 'https://www.aiims.edu', type: 'Official', source: 'AIIMS' },
+            { icon: '📚', title: 'NCERT Biology', link: 'https://ncert.nic.in/textbook.php', type: 'Official', source: 'NCERT' },
+            { icon: '🔬', title: 'Medical Courses', link: 'https://www.khanacademy.org/science/health-and-medicine', type: 'Video', source: 'Khan Academy' }
+          ],
+          additional: [
+            { icon: '🧬', title: 'Biology Animations', link: 'https://learn.genetics.utah.edu', type: 'Interactive', source: 'Free' },
+            { icon: '📱', title: 'Medical Apps', link: '#', type: 'Tools', source: 'Various' }
+          ]
+        }
+      };
+
+      // Get subject resources
+      const subjectRes = resources[subject] || {
+        essential: [
+          { icon: '📚', title: 'Online Resources', link: 'https://www.coursera.org', type: 'Courses', source: 'Various' },
+          { icon: '🎥', title: 'Video Lectures', link: 'https://www.youtube.com', type: 'Videos', source: 'YouTube' }
+        ],
+        additional: [
+          { icon: '📱', title: 'Study Apps', link: 'https://play.google.com', type: 'Apps', source: 'Various' }
+        ]
+      };
+
+      // Phase-specific modifications
+      if (phase.includes('Immediate')) {
+        subjectRes.essential = subjectRes.essential.filter(r => r.type !== 'Advanced');
+      }
+      if (phase.includes('Advanced') || phase.includes('Long-term')) {
+        subjectRes.additional.push({ icon: '🎯', title: 'Specialized Resources', link: '#', type: 'Advanced', source: 'Various' });
+      }
+
+      return subjectRes;
+    }
+  </script>
+</body>
+</html>

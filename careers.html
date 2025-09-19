@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Career Options - Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+
+
+    <style>
+        .career-filters {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .career-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .career-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .career-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .career-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .career-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .career-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .career-skills {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .skills-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-list {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .career-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .career-card {
+                padding: 1.5rem;
+            }
+
+            .career-filters {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .career-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎓 Path Finder</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aptitude.html">Aptitude Test</a></li>
+                <li><a href="careers.html" class="active">Careers</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="colleges.html">Colleges</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="overlay"></div>
+    <div class="sidebar">
+        <ul class="sidebar-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aptitude.html">Aptitude Test</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="colleges.html">Colleges</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="login.html">Log In</a></li>
+        </ul>
+        <div class="sidebar-buttons">
+            <a href="aptitude.html" class="sidebar-cta">Take Test</a>
+            <a href="login.html" class="sidebar-login">Log In</a>
+        </div>
+    </div>
+
+    <main class="container" style="padding-top: 100px;">
+        <div class="fade-in">
+            <h1 style="text-align: center; margin-bottom: 1rem; color: white; font-size: 3rem;">Career Options</h1>
+            <p style="text-align: center; margin-bottom: 3rem; color: rgba(255,255,255,0.9); font-size: 1.2rem;">
+                Explore various career paths and find the one that suits your interests and skills.
+            </p>
+
+            <div class="career-filters">
+                <span style="font-weight: 600; color: #333;">Filter by Category:</span>
+                <button class="filter-btn active" data-category="all">All Careers</button>
+                <button class="filter-btn" data-category="tech">Technology</button>
+                <button class="filter-btn" data-category="medical">Medical</button>
+                <button class="filter-btn" data-category="business">Business</button>
+                <button class="filter-btn" data-category="creative">Creative</button>
+                <button class="filter-btn" data-category="education">Education</button>
+            </div>
+
+            <div id="careerGrid" class="career-grid"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aptitude.html">Aptitude Test</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="colleges.html">Colleges</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="login.html">Log In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; Path Finder - Your Digital Career Guide. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const careers = [
+            {
+                title: "Software Engineer",
+                description: "Develop and maintain software applications, websites, and systems.",
+                salary: "₹6-15 LPA",
+                category: "tech",
+                skills: "Programming, Problem Solving, Algorithms",
+                growth: "High",
+                icon: "💻"
+            },
+            {
+                title: "Doctor",
+                description: "Provide medical care and treatment to patients in various specialties.",
+                salary: "₹8-20 LPA",
+                category: "medical",
+                skills: "Medical Knowledge, Empathy, Communication",
+                growth: "High",
+                icon: "⚕️"
+            },
+            {
+                title: "Business Analyst",
+                description: "Analyze business data to improve performance and efficiency.",
+                salary: "₹5-12 LPA",
+                category: "business",
+                skills: "Data Analysis, Communication, Problem Solving",
+                growth: "Medium",
+                icon: "📊"
+            },
+            {
+                title: "Teacher",
+                description: "Educate and inspire students in various subjects and grade levels.",
+                salary: "₹3-8 LPA",
+                category: "education",
+                skills: "Teaching, Subject Expertise, Communication",
+                growth: "Medium",
+                icon: "👨‍🏫"
+            },
+            {
+                title: "Graphic Designer",
+                description: "Create visual content for digital and print media.",
+                salary: "₹3-8 LPA",
+                category: "creative",
+                skills: "Creativity, Design Tools, Color Theory",
+                growth: "Medium",
+                icon: "🎨"
+            },
+            {
+                title: "Lawyer",
+                description: "Provide legal advice and represent clients in court.",
+                salary: "₹5-15 LPA",
+                category: "business",
+                skills: "Legal Knowledge, Advocacy, Research",
+                growth: "High",
+                icon: "⚖️"
+            },
+            {
+                title: "Data Scientist",
+                description: "Analyze complex data sets to extract insights and predictions.",
+                salary: "₹8-18 LPA",
+                category: "tech",
+                skills: "Statistics, Machine Learning, Python",
+                growth: "Very High",
+                icon: "📈"
+            },
+            {
+                title: "Nurse",
+                description: "Provide patient care and support medical teams.",
+                salary: "₹3-7 LPA",
+                category: "medical",
+                skills: "Patient Care, Medical Knowledge, Empathy",
+                growth: "Medium",
+                icon: "👩‍⚕️"
+            },
+            {
+                title: "Marketing Manager",
+                description: "Develop and execute marketing strategies for brands.",
+                salary: "₹6-14 LPA",
+                category: "business",
+                skills: "Marketing, Strategy, Communication",
+                growth: "High",
+                icon: "📢"
+            },
+            {
+                title: "Civil Engineer",
+                description: "Design, construct, and maintain infrastructure projects.",
+                salary: "₹4-12 LPA",
+                category: "tech",
+                skills: "Engineering, Project Management, Technical Drawing",
+                growth: "Medium",
+                icon: "🏗️"
+            },
+            {
+                title: "Pharmacist",
+                description: "Dispense medications and provide healthcare advice.",
+                salary: "₹3-8 LPA",
+                category: "medical",
+                skills: "Pharmaceutical Knowledge, Patient Care, Attention to Detail",
+                growth: "Medium",
+                icon: "💊"
+            },
+            {
+                title: "Journalist",
+                description: "Research, write, and report news stories for media outlets.",
+                salary: "₹3-10 LPA",
+                category: "creative",
+                skills: "Writing, Research, Communication",
+                growth: "Medium",
+                icon: "📰"
+            },
+            {
+                title: "Accountant",
+                description: "Manage financial records and ensure compliance with regulations.",
+                salary: "₹4-10 LPA",
+                category: "business",
+                skills: "Financial Analysis, Accounting Software, Attention to Detail",
+                growth: "Medium",
+                icon: "🧮"
+            },
+            {
+                title: "Chef",
+                description: "Prepare and cook food in restaurants and other establishments.",
+                salary: "₹3-8 LPA",
+                category: "creative",
+                skills: "Cooking, Food Safety, Creativity",
+                growth: "Medium",
+                icon: "👨‍🍳"
+            },
+            {
+                title: "Cybersecurity Analyst",
+                description: "Protect computer systems and networks from cyber threats.",
+                salary: "₹6-15 LPA",
+                category: "tech",
+                skills: "Security Protocols, Risk Assessment, Technical Knowledge",
+                growth: "Very High",
+                icon: "🔒"
+            }
+        ];
+
+        const careerGrid = document.getElementById('careerGrid');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        function renderCareers(careerList) {
+            careerGrid.innerHTML = '';
+            if (careerList.length === 0) {
+                careerGrid.innerHTML = '<div class="no-results">No careers found in this category.</div>';
+                return;
+            }
+
+            careerList.forEach(career => {
+                const careerCard = document.createElement('div');
+                careerCard.className = 'career-card fade-in';
+                careerCard.innerHTML = `
+                    <div class="career-title">
+                        ${career.icon} ${career.title}
+                    </div>
+                    <div class="career-description">${career.description}</div>
+                    <div class="career-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Salary Range</div>
+                            <div class="detail-value">${career.salary}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Growth Potential</div>
+                            <div class="detail-value">${career.growth}</div>
+                        </div>
+                    </div>
+                    <div class="career-skills">
+                        <div class="skills-label">Key Skills Required:</div>
+                        <div class="skills-list">${career.skills}</div>
+                    </div>
+                `;
+                careerGrid.appendChild(careerCard);
+            });
+        }
+
+        // Filter functionality
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const category = button.dataset.category;
+                const filtered = category === 'all'
+                    ? careers
+                    : careers.filter(career => career.category === category);
+
+                renderCareers(filtered);
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        renderCareers(careers);
+    </script>
+</body>
+</html>

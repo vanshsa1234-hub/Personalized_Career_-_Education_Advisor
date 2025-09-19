@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Finder - Your Digital Career Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light mode colors */
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8f9fa;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-accent: #667eea;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.2);
+            --border-color: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            /* Dark mode colors */
+            --bg-primary: linear-gradient(135deg, #2d1b69 0%, #1a1a2e 100%);
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b9ba;
+            --text-accent: #8b9de8;
+            --card-bg: #16213e;
+            --header-bg: rgba(26, 26, 46, 0.95);
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-hover: rgba(0, 0, 0, 0.4);
+            --border-color: #3a3a5c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-accent);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: var(--bg-tertiary);
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: #ffb123;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            transform: translateX(28px);
+            background: rgb(255, 255, 255);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            border-color: var(--text-accent);
+        }
+
+        .theme-icons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 8px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .theme-icon {
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .sun-icon {
+            opacity: 0.3;
+        }
+
+        .moon-icon {
+            opacity: 0.7;
+        }
+
+        [data-theme="dark"] .sun-icon {
+            opacity: 0.7;
+        }
+
+        [data-theme="dark"] .moon-icon {
+            opacity: 0.3;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .login {
+            background: linear-gradient(45deg, #fd0101, #020afa);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            margin-left: 1rem;
+        }
+
+        .login:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .mobile-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+            padding: 80px 0 20px;
+            box-shadow: -5px 0 25px var(--shadow);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-links li {
+            margin: 0;
+        }
+
+        .sidebar-links a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+            padding-left: 40px;
+        }
+
+        .sidebar-buttons {
+            padding: 20px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .sidebar-cta {
+            background: white;
+            color: var(--text-accent);
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-login {
+            background: linear-gradient(45deg, #fd0101, #020afa);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1001;
+        }
+
+        .chatbot-button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .chatbot-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-icon svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+
+        .pulse-ring {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid rgba(102, 126, 234, 0.6);
+            border-radius: 50px;
+            animation: chatbotPulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes chatbotPulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--text-accent);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--shadow-hover);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+            transition: background 0.3s ease;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-hover);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 0;
+            background: var(--bg-primary);
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 0;
+            background: var(--bg-tertiary);
+            transition: background 0.3s ease;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .about-image {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 400px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--text-accent);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--text-accent);
+        }
+
+        /* Interactive Elements */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Theme transition effect */
+        .theme-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-transition.active {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-links,
+            .cta-button,
+            .login {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .theme-toggle-container {
+                margin-right: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                width: 50px;
+                height: 28px;
+            }
+
+            .theme-toggle::before {
+                width: 20px;
+                height: 20px;
+            }
+
+            [data-theme="dark"] .theme-toggle::before {
+                transform: translateX(22px);
+            }
+
+            .theme-icons {
+                padding: 0 6px;
+            }
+
+            .theme-icon {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+            }
+
+            .theme-toggle {
+                width: 45px;
+                height: 25px;
+            }
+
+            .theme-toggle::before {
+                width: 18px;
+                height: 18px;
+            }
+
+            [data-theme="dark"] .theme-toggle::before {
+                transform: translateX(20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Transition Effect -->
+    <div class="theme-transition" id="themeTransition"></div>
+
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">🎓 Path Finder</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="aptitude.html">Aptitude Test</a></li>
+                <li><a href="careers.html">Careers</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="colleges.html">Colleges</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+            <div class="theme-toggle-container">
+                <div class="theme-toggle" id="themeToggle">
+                    <div class="theme-icons">
+                        <span class="theme-icon sun-icon">☀️</span>
+                        <span class="theme-icon moon-icon">🌙</span>
+                    </div>
+                </div>
+                <a href="aptitude.html" class="cta-button">Take Aptitude Test</a>
+                <a href="login.html" class="login">Log In</a>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-links">
+            <li><a href="#home" onclick="closeSidebar()">🏠 Home</a></li>
+            <li><a href="aptitude.html" onclick="closeSidebar()">🧠 Aptitude Test</a></li>
+            <li><a href="careers.html" onclick="closeSidebar()">💼 Careers</a></li>
+            <li><a href="resources.html" onclick="closeSidebar()">📚 Resources</a></li>
+            <li><a href="colleges.html" onclick="closeSidebar()">🏫 Colleges</a></li>
+            <li><a href="roadmap.html" onclick="closeSidebar()">🗺️ Roadmap</a></li>
+            <li><a href="profile.html" onclick="closeSidebar()">👤 Profile</a></li>
+            <li><a href="login.html" onclick="closeSidebar()">🔐 Log In</a></li>
+            <li><a href="chatbot.html" onclick="closeSidebar()">🤖 AI Career Advisor</a></li>
+        </ul>
+        <div class="sidebar-buttons">
+            <a href="aptitude.html" class="sidebar-cta" onclick="closeSidebar()">Take Aptitude Test</a>
+            <a href="login.html" class="sidebar-login" onclick="closeSidebar()">Log In</a>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- Floating Chatbot Button -->
+    <div class="chatbot-container">
+        <a href="chatbot.html" class="chatbot-button" id="chatbotButton">
+            <div class="chatbot-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                    <path d="M8.5 11C9.32843 11 10 10.3284 10 9.5C10 8.67157 9.32843 8 8.5 8C7.67157 8 7 8.67157 7 9.5C7 10.3284 7.67157 11 8.5 11Z" fill="currentColor"/>
+                    <path d="M15.5 11C16.3284 11 17 10.3284 17 9.5C17 8.67157 16.3284 8 15.5 8C14.6716 8 14 8.67157 14 9.5C14 10.3284 14.6716 11 15.5 11Z" fill="currentColor"/>
+                    <path d="M12 17.5C14.4853 17.5 16.5 15.4853 16.5 13H7.5C7.5 15.4853 9.51472 17.5 12 17.5Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <span class="chatbot-text">AI Career Advisor</span>
+            <div class="pulse-ring"></div>
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1 class="fade-in">Your Future Starts Here</h1>
+            <p class="fade-in">Discover the perfect career path with AI-powered guidance tailored just for you</p>
+            <div class="hero-buttons fade-in">
+                <a href="aptitude.html" class="btn btn-primary pulse">Start Your Journey</a>
+                <a href="#features" class="btn btn-secondary">Explore Features</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Everything You Need to Make the Right Choice</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Aptitude Assessment</h3>
+                    <p>Discover your strengths and interests through our comprehensive aptitude tests designed by career experts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Career Path Mapping</h3>
+                    <p>Visualize your future with detailed career roadmaps showing exactly where each degree can take you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏫</div>
+                    <h3>College Directory</h3>
+                    <p>Find the best government colleges near you with detailed information on courses, facilities, and admission requirements.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Timeline Tracker</h3>
+                    <p>Never miss important deadlines with our smart notification system for admissions, scholarships, and exams.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Recommendations</h3>
+                    <p>Get personalized course and college recommendations based on your profile and career aspirations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Study Resources</h3>
+                    <p>Access curated study materials, e-books, and skill development resources for your chosen path.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>50K+</h3>
+                    <p>Students Guided</p>
+                </div>
+                <div class="stat-item">
+                    <h3>1200+</h3>
+                    <p>Government Colleges</p>
+                </div>
+                <div class="stat-item">
+                    <h3>95%</h3>
+                    <p>Success Rate</p>
+                </div>
+                <div class="stat-item">
+                    <h3>150+</h3>
+                    <p>Career Paths</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Bridging the Gap in Career Guidance</h2>
+                    <p>We understand the confusion students face after Class 10 and 12. Our platform addresses the critical gap in career awareness that leads to poor academic decisions and college dropouts.</p>
+                    <p>With personalized recommendations, comprehensive college information, and expert guidance, we're empowering students to make informed decisions about their future.</p>
+                    <a href="#features" class="btn" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white;">Learn More</a>
+                </div>
+                <div class="about-image">
+                    <div>Interactive Career Guidance Platform</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="aptitude.html">Aptitude Test</a></li>
+                        <li><a href="colleges.html">College Search</a></li>
+                        <li><a href="careers.html">Career Mapping</a></li>
+                        <li><a href="resources.html">Study Resources</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="feedback.html">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>&copy; Path Finder - Your Digital Career Guide. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Management System
+        class ThemeManager {
+            constructor() {
+                this.currentTheme = this.getStoredTheme() || 'light';
+                this.themeToggle = document.getElementById('themeToggle');
+                this.themeTransition = document.getElementById('themeTransition');
+                this.init();
+            }
+
+            init() {
+                this.applyTheme(this.currentTheme, false);
+                this.bindEvents();
+                this.broadcastThemeToOtherTabs();
+            }
+
+            getStoredTheme() {
+                return localStorage.getItem('pathfinder-theme');
+            }
+
+            setStoredTheme(theme) {
+                localStorage.setItem('pathfinder-theme', theme);
+                // Broadcast to other tabs
+                localStorage.setItem('pathfinder-theme-change', Date.now().toString());
+            }
+
+            applyTheme(theme, animate = true) {
+                if (animate) {
+                    this.showTransitionEffect();
+                }
+
+                document.documentElement.setAttribute('data-theme', theme);
+                this.currentTheme = theme;
+                this.setStoredTheme(theme);
+                
+                // Update theme toggle appearance
+                this.updateToggleState();
+                
+                // Trigger custom event for other components
+                window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme } }));
+            }
+
+            showTransitionEffect() {
+                this.themeTransition.classList.add('active');
+                setTimeout(() => {
+                    this.themeTransition.classList.remove('active');
+                }, 300);
+            }
+
+            updateToggleState() {
+                // Add a small bounce animation to the toggle
+                this.themeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.themeToggle.style.transform = 'scale(1)';
+                }, 150);
+            }
+
+            toggleTheme() {
+                const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                this.applyTheme(newTheme);
+            }
+
+            bindEvents() {
+                this.themeToggle.addEventListener('click', () => {
+                    this.toggleTheme();
+                });
+
+                // Listen for theme changes from other tabs
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'pathfinder-theme-change') {
+                        const newTheme = this.getStoredTheme();
+                        if (newTheme && newTheme !== this.currentTheme) {
+                            this.applyTheme(newTheme, false);
+                        }
+                    }
+                });
+
+                // Listen for system theme changes
+                if (window.matchMedia) {
+                    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                    mediaQuery.addEventListener('change', (e) => {
+                        if (!this.getStoredTheme()) {
+                            this.applyTheme(e.matches ? 'dark' : 'light');
+                        }
+                    });
+                }
+            }
+
+            broadcastThemeToOtherTabs() {
+                // Send message to other tabs about current theme
+                localStorage.setItem('pathfinder-theme-sync', JSON.stringify({
+                    theme: this.currentTheme,
+                    timestamp: Date.now()
+                }));
+            }
+        }
+
+        // Initialize theme manager
+        const themeManager = new ThemeManager();
+
+        // Mobile menu and sidebar functionality
+        const mobileMenu = document.getElementById('mobileMenu');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeSidebar() {
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenu.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!sidebar.contains(e.target) && !mobileMenu.contains(e.target)) {
+                if (sidebar.classList.contains('active')) {
+                    closeSidebar();
+                }
+            }
+        });
+
+        // Close sidebar on window resize if screen becomes larger
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards for animation
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'var(--header-bg)';
+                header.style.backdropFilter = 'blur(15px)';
+            } else {
+                header.style.background = 'var(--header-bg)';
+                header.style.backdropFilter = 'blur(10px)';
+            }
+        });
+
+        // Chatbot functionality
+        const chatbotButton = document.getElementById('chatbotButton');
+
+        // Add bounce effect on hover
+        chatbotButton.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1) translateY(-5px)';
+        });
+
+        chatbotButton.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) translateY(0)';
+        });
+
+        // Enhanced Theme Toggle Interactions
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Add hover effects
+        themeToggle.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+
+        themeToggle.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+
+        // Add keyboard support
+        themeToggle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                themeManager.toggleTheme();
+            }
+        });
+
+        // Make theme toggle focusable
+        themeToggle.setAttribute('tabindex', '0');
+        themeToggle.setAttribute('role', 'switch');
+        themeToggle.setAttribute('aria-label', 'Toggle dark/light theme');
+
+        // Update aria-checked when theme changes
+        window.addEventListener('themeChanged', function(e) {
+            const isDark = e.detail.theme === 'dark';
+            themeToggle.setAttribute('aria-checked', isDark);
+        });
+
+        // Initialize aria-checked
+        themeToggle.setAttribute('aria-checked', themeManager.currentTheme === 'dark');
+
+        // Add some particle effects for theme transition (optional enhancement)
+        function createThemeParticles() {
+            const particles = [];
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: 4px;
+                    height: 4px;
+                    background: var(--text-accent);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 10001;
+                    opacity: 0;
+                `;
+                document.body.appendChild(particle);
+                particles.push(particle);
+            }
+
+            particles.forEach((particle, index) => {
+                const delay = index * 50;
+                setTimeout(() => {
+                    particle.style.left = Math.random() * window.innerWidth + 'px';
+                    particle.style.top = Math.random() * window.innerHeight + 'px';
+                    particle.style.opacity = '1';
+                    particle.style.transition = 'all 0.6s ease-out';
+                    particle.style.transform = 'translateY(-100px) scale(0)';
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 600);
+                }, delay);
+            });
+        }
+
+        // Enhanced theme change animation
+        window.addEventListener('themeChanged', function() {
+            if (window.innerWidth > 768) { // Only on larger screens
+                createThemeParticles();
+            }
+        });
+
+        // Add loading state management
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+            
+            // Animate elements on load
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach((el, index) => {
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 100);
+        });
+
+        // Save scroll position when theme changes to prevent jump
+        let scrollPosition = 0;
+        themeToggle.addEventListener('click', function() {
+            scrollPosition = window.pageYOffset;
+        });
+
+        // Restore scroll position after theme change
+        window.addEventListener('themeChanged', function() {
+            setTimeout(() => {
+                window.scrollTo(0, scrollPosition);
+            }, 50);
+        });
+
+        // Add system preference detection on first visit
+        if (!themeManager.getStoredTheme()) {
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                themeManager.applyTheme('dark', false);
+            }
+        }
+
+        console.log('🎓 Path Finder Theme System Loaded Successfully!');
+        console.log(`Current theme: ${themeManager.currentTheme}`);
+    </script>
+</body>
+</html>

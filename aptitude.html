@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Test - Path Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border-radius: 15px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .test-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-screen p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .class-selection {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 3rem 0;
+        }
+
+        .class-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .class-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            color: #666;
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Question Interface */
+        .question-screen {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .question-counter {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .option.selected {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .results-header {
+            margin-bottom: 3rem;
+        }
+
+        .results-header h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .score-display {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .score-display h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendations {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .recommendations h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .subject-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .subject-score {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .subject-score h5 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .class-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .class-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .test-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+            }
+
+            .subject-scores {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="nav">
+                <div class="logo">🎓 Path Finder</div>
+                <a href="#" class="back-btn" onclick="goBack()">← Back to Home</a>
+            </div>
+        </div>
+
+        <!-- Main Test Container -->
+        <div class="test-container">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <h1>Career Aptitude Test</h1>
+                <p>Discover your strengths and find the perfect academic path for your future</p>
+                
+                <div class="instructions">
+                    <h3>Instructions:</h3>
+                    <ul>
+                        <li>Choose your current class level to get personalized questions</li>
+                        <li>Answer all 25 questions honestly based on your interests and strengths</li>
+                        <li>There are no right or wrong answers - choose what feels most natural to you</li>
+                        <li>The test takes approximately 10-15 minutes to complete</li>
+                        <li>You'll receive detailed recommendations based on your responses</li>
+                    </ul>
+                </div>
+
+                <div class="class-selection">
+                    <button class="class-btn" onclick="startTest('class10')">
+                        Class 10<br>
+                        <small>Choosing Stream for 11th & 12th</small>
+                    </button>
+                    <button class="class-btn" onclick="startTest('class12')">
+                        Class 12<br>
+                        <small>Choosing Career & College</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Screen -->
+            <div class="question-screen" id="questionScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="question-header">
+                    <div class="question-counter" id="questionCounter">Question 1 of 25</div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text" id="questionText"></div>
+                    <div class="options" id="optionsContainer"></div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+                    <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <div class="results-header">
+                    <h2>Your Aptitude Test Results</h2>
+                    <p>Based on your responses, here are your personalized recommendations:</p>
+                </div>
+
+                <div class="score-display" id="scoreDisplay">
+                    <h3>Overall Aptitude Score</h3>
+                    <div style="font-size: 3rem; font-weight: bold;" id="overallScore">85%</div>
+                </div>
+
+                <div class="subject-scores" id="subjectScores"></div>
+
+                <div class="recommendations" id="recommendations">
+                    <h4>Recommended Path:</h4>
+                    <div id="recommendationText"></div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="nav-btn" onclick="retakeTest()">Retake Test</button>
+                    <button class="nav-btn" onclick="viewRoadmap()">View Career Roadmap</button>
+                    <button class="nav-btn" onclick="viewDetailedResults()">View Detailed Analysis</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test Data
+        const questions = {
+            class10: [
+                {
+                    question: "Which subject do you find most engaging?",
+                    options: ["Mathematics", "Science (Physics/Chemistry)", "Biology", "History/Geography", "Languages"],
+                    category: "academic"
+                },
+                {
+                    question: "What type of activities do you prefer in your free time?",
+                    options: ["Solving puzzles/brain teasers", "Conducting experiments", "Reading about nature/health", "Creative writing/art", "Learning new languages"],
+                    category: "interest"
+                },
+                {
+                    question: "Which career field excites you the most?",
+                    options: ["Engineering/Technology", "Medicine/Healthcare", "Business/Commerce", "Arts/Literature", "Social Sciences"],
+                    category: "career"
+                },
+                {
+                    question: "How do you prefer to learn new concepts?",
+                    options: ["Through logical reasoning", "Hands-on experiments", "Visual aids and diagrams", "Discussion and debate", "Reading and research"],
+                    category: "learning"
+                },
+                {
+                    question: "What motivates you the most?",
+                    options: ["Solving complex problems", "Helping others", "Creating something new", "Understanding how things work", "Making a social impact"],
+                    category: "motivation"
+                },
+                {
+                    question: "Which of these skills comes naturally to you?",
+                    options: ["Analytical thinking", "Scientific reasoning", "Communication", "Creativity", "Leadership"],
+                    category: "skills"
+                },
+                {
+                    question: "What type of work environment appeals to you?",
+                    options: ["Tech companies/startups", "Hospitals/clinics", "Corporate offices", "Creative studios", "Government offices"],
+                    category: "environment"
+                },
+                {
+                    question: "How do you handle challenging problems?",
+                    options: ["Break them into smaller parts", "Research extensively", "Seek help from others", "Use creative approaches", "Apply theoretical knowledge"],
+                    category: "problem_solving"
+                },
+                {
+                    question: "Which extracurricular activity interests you most?",
+                    options: ["Math/Science Olympiad", "Science Fair", "Debate Club", "Drama/Arts Club", "Social Service"],
+                    category: "extracurricular"
+                },
+                {
+                    question: "What type of books do you enjoy reading?",
+                    options: ["Science fiction/Technology", "Medical journals/Health", "Biographies/Business", "Fiction/Poetry", "History/Philosophy"],
+                    category: "reading"
+                },
+                {
+                    question: "How do you prefer to work on projects?",
+                    options: ["Independently with clear goals", "In small research teams", "Leading a team", "Collaboratively with creative input", "With guidance from mentors"],
+                    category: "teamwork"
+                },
+                {
+                    question: "What aspect of a subject interests you most?",
+                    options: ["Practical applications", "Theoretical concepts", "Real-world implications", "Creative possibilities", "Historical context"],
+                    category: "learning_style"
+                },
+                {
+                    question: "Which type of success do you value most?",
+                    options: ["Innovation and discovery", "Helping save lives", "Financial achievement", "Artistic recognition", "Social change"],
+                    category: "values"
+                },
+                {
+                    question: "How do you approach studying for exams?",
+                    options: ["Practice problems repeatedly", "Understand concepts deeply", "Create visual summaries", "Discuss with friends", "Memorize key facts"],
+                    category: "study_method"
+                },
+                {
+                    question: "What type of future do you envision for yourself?",
+                    options: ["Tech entrepreneur/engineer", "Doctor/researcher", "Business leader", "Writer/artist", "Teacher/social worker"],
+                    category: "future_vision"
+                },
+                {
+                    question: "Which school subject makes you lose track of time?",
+                    options: ["Mathematics", "Physics/Chemistry", "Biology", "English/Literature", "Social Studies"],
+                    category: "engagement"
+                },
+                {
+                    question: "What type of problem-solving excites you?",
+                    options: ["Mathematical equations", "Scientific experiments", "Business case studies", "Creative challenges", "Social issues"],
+                    category: "problem_type"
+                },
+                {
+                    question: "How do you prefer to express your ideas?",
+                    options: ["Through calculations/formulas", "Scientific reports", "Presentations/pitches", "Creative writing/art", "Essays/discussions"],
+                    category: "expression"
+                },
+                {
+                    question: "What drives your curiosity most?",
+                    options: ["How technology works", "How the human body functions", "How businesses succeed", "How to create beautiful things", "How society can improve"],
+                    category: "curiosity"
+                },
+                {
+                    question: "Which achievement would make you most proud?",
+                    options: ["Developing new technology", "Discovering a cure", "Building a successful business", "Creating acclaimed art", "Improving education"],
+                    category: "achievement"
+                },
+                {
+                    question: "What type of challenges do you enjoy most?",
+                    options: ["Technical puzzles", "Research questions", "Strategic problems", "Creative projects", "Social issues"],
+                    category: "challenges"
+                },
+                {
+                    question: "How do you prefer to learn about careers?",
+                    options: ["Tech internships", "Medical volunteering", "Business simulations", "Creative workshops", "Community service"],
+                    category: "career_exploration"
+                },
+                {
+                    question: "What aspect of learning motivates you?",
+                    options: ["Building/creating things", "Understanding life processes", "Strategic thinking", "Self-expression", "Making a difference"],
+                    category: "learning_motivation"
+                },
+                {
+                    question: "Which type of impact do you want to make?",
+                    options: ["Technological advancement", "Health and wellness", "Economic growth", "Cultural enrichment", "Social justice"],
+                    category: "impact"
+                },
+                {
+                    question: "What describes your ideal study session?",
+                    options: ["Coding/problem-solving", "Lab experiments", "Case study analysis", "Creative brainstorming", "Research and discussion"],
+                    category: "ideal_study"
+                }
+            ],
+            class12: [
+                {
+                    question: "Which field aligns best with your career aspirations?",
+                    options: ["Engineering/Technology", "Medicine/Healthcare", "Business/Management", "Arts/Design", "Law/Public Service"],
+                    category: "career_field"
+                },
+                {
+                    question: "What type of college environment do you prefer?",
+                    options: ["Technical institutes (IITs/NITs)", "Medical colleges", "Business schools", "Liberal arts colleges", "Law universities"],
+                    category: "college_preference"
+                },
+                {
+                    question: "Which entrance exam are you most prepared for?",
+                    options: ["JEE Main/Advanced", "NEET", "CAT/MAT", "Design entrance exams", "CLAT/Law exams"],
+                    category: "entrance_exam"
+                },
+                {
+                    question: "What type of career growth interests you?",
+                    options: ["Technical expertise", "Medical specialization", "Business leadership", "Creative innovation", "Public service"],
+                    category: "career_growth"
+                },
+                {
+                    question: "Which work-life balance appeals to you?",
+                    options: ["Flexible tech work", "Demanding but rewarding medical practice", "Dynamic business environment", "Project-based creative work", "Structured government service"],
+                    category: "work_life"
+                },
+                {
+                    question: "What type of salary expectation do you have initially?",
+                    options: ["High starting salary (Tech)", "Gradual increase (Medical)", "Performance-based (Business)", "Variable income (Creative)", "Steady government pay"],
+                    category: "salary_expectation"
+                },
+                {
+                    question: "Which type of further education interests you?",
+                    options: ["M.Tech/MS in Engineering", "MD/MS in Medicine", "MBA", "Master's in Fine Arts", "LLM/Civil Services"],
+                    category: "higher_education"
+                },
+                {
+                    question: "What type of job security do you value?",
+                    options: ["High demand tech skills", "Essential healthcare services", "Market-driven opportunities", "Niche creative expertise", "Government job security"],
+                    category: "job_security"
+                },
+                {
+                    question: "Which type of innovation excites you?",
+                    options: ["Technological breakthroughs", "Medical advancements", "Business models", "Artistic expression", "Policy reforms"],
+                    category: "innovation"
+                },
+                {
+                    question: "What type of stress do you handle best?",
+                    options: ["Technical deadlines", "Life-and-death decisions", "Market pressures", "Creative blocks", "Legal complexities"],
+                    category: "stress_handling"
+                },
+                {
+                    question: "Which type of recognition motivates you?",
+                    options: ["Technical achievements", "Patient gratitude", "Business success", "Artistic acclaim", "Social impact"],
+                    category: "recognition"
+                },
+                {
+                    question: "What type of continuous learning appeals to you?",
+                    options: ["New programming languages", "Medical research", "Market trends", "Artistic techniques", "Legal precedents"],
+                    category: "continuous_learning"
+                },
+                {
+                    question: "Which type of teamwork do you prefer?",
+                    options: ["Cross-functional tech teams", "Medical teams", "Business units", "Creative collaborations", "Legal teams"],
+                    category: "teamwork_preference"
+                },
+                {
+                    question: "What type of global opportunities interest you?",
+                    options: ["International tech companies", "Global health organizations", "Multinational corporations", "International art scene", "Diplomatic services"],
+                    category: "global_opportunities"
+                },
+                {
+                    question: "Which type of entrepreneurship appeals to you?",
+                    options: ["Tech startups", "Healthcare ventures", "Business enterprises", "Creative agencies", "Social enterprises"],
+                    category: "entrepreneurship"
+                },
+                {
+                    question: "What type of specialization interests you most?",
+                    options: ["AI/Machine Learning", "Cardiology/Neurology", "Marketing/Finance", "Graphic/Product Design", "Corporate/Criminal Law"],
+                    category: "specialization"
+                },
+                {
+                    question: "Which type of impact do you want on society?",
+                    options: ["Digital transformation", "Healthcare improvement", "Economic development", "Cultural influence", "Justice and rights"],
+                    category: "societal_impact"
+                },
+                {
+                    question: "What type of college life do you envision?",
+                    options: ["Tech competitions & coding", "Medical studies & internships", "Case studies & presentations", "Portfolio development", "Debates & mock trials"],
+                    category: "college_life"
+                },
+                {
+                    question: "Which type of internship would you prefer?",
+                    options: ["Software companies", "Hospitals/clinics", "Corporate offices", "Design studios", "Law firms/courts"],
+                    category: "internship"
+                },
+                {
+                    question: "What type of research interests you?",
+                    options: ["Technology development", "Medical research", "Market research", "Creative research", "Legal research"],
+                    category: "research"
+                },
+                {
+                    question: "Which type of leadership role appeals to you?",
+                    options: ["Tech team lead", "Department head doctor", "Business manager", "Creative director", "Legal advisor"],
+                    category: "leadership"
+                },
+                {
+                    question: "What type of client interaction do you prefer?",
+                    options: ["Technical consultations", "Patient care", "Business meetings", "Client presentations", "Legal counseling"],
+                    category: "client_interaction"
+                },
+                {
+                    question: "Which type of competition motivates you?",
+                    options: ["Hackathons/coding contests", "Medical case competitions", "Business plan contests", "Design competitions", "Moot court competitions"],
+                    category: "competition"
+                },
+                {
+                    question: "What type of long-term goal do you have?",
+                    options: ["CTO/Tech founder", "Chief Medical Officer", "CEO/Business leader", "Art director", "Judge/Legal expert"],
+                    category: "long_term_goals"
+                },
+                {
+                    question: "Which type of daily work routine suits you?",
+                    options: ["Coding & problem-solving", "Patient consultations", "Strategy & meetings", "Creative projects", "Legal documentation"],
+                    category: "daily_routine"
+                }
+            ]
+        };
+
+        // Test state
+        let currentTest = null;
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let testQuestions = [];
+
+        // Start test
+        function startTest(testType) {
+            currentTest = testType;
+            testQuestions = [...questions[testType]];
+            currentQuestionIndex = 0;
+            answers = [];
+            
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('questionScreen').style.display = 'block';
+            
+            showQuestion();
+        }
+
+        // Show current question
+        function showQuestion() {
+            const question = testQuestions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex + 1) / testQuestions.length) * 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestionIndex + 1} of ${testQuestions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                
+                if (answers[currentQuestionIndex] === index) {
+                    optionDiv.classList.add('selected');
+                }
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').textContent = currentQuestionIndex === testQuestions.length - 1 ? 'Finish Test' : 'Next';
+        }
+
+        // Select option
+        function selectOption(optionIndex) {
+            answers[currentQuestionIndex] = optionIndex;
+            
+            // Update UI
+            document.querySelectorAll('.option').forEach((option, index) => {
+                option.classList.toggle('selected', index === optionIndex);
+            });
+        }
+
+        // Navigation functions
+        function nextQuestion() {
+            if (answers[currentQuestionIndex] === undefined) {
+                alert('Please select an answer before proceeding.');
+                return;
+            }
+            
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        // Finish test and show results
+        function finishTest() {
+            const results = calculateResults();
+            displayResults(results);
+            
+            document.getElementById('questionScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+        }
+
+        // Calculate results based on answers
+        function calculateResults() {
+            const categoryScores = {};
+            const streamMapping = {
+                class10: {
+                    'Science': ['academic', 'interest', 'problem_solving', 'learning_style'],
+                    'Commerce': ['career', 'motivation', 'teamwork', 'values'],
+                    'Arts': ['expression', 'creativity', 'future_vision', 'impact']
+                },
+                class12: {
+                    'Engineering': ['career_field', 'entrance_exam', 'technical', 'innovation'],
+                    'Medical': ['healthcare', 'research', 'specialization', 'societal_impact'],
+                    'Business': ['business', 'leadership', 'entrepreneurship', 'global_opportunities'],
+                    'Arts': ['creative', 'artistic', 'cultural', 'expression'],
+                    'Law': ['legal', 'justice', 'public_service', 'policy']
+                }
+            };
+
+            // Count answers by category
+            testQuestions.forEach((question, index) => {
+                const answer = answers[index];
+                if (answer !== undefined) {
+                    if (!categoryScores[question.category]) {
+                        categoryScores[question.category] = { total: 0, count: 0 };
+                    }
+                    categoryScores[question.category].total += answer;
+                    categoryScores[question.category].count++;
+                }
+            });
+
+            // Calculate stream recommendations
+            const streamScores = {};
+            
+            if (currentTest === 'class10') {
+                // For Class 10, recommend streams based on interests
+                const mathScienceScore = (answers.filter(a => a === 0).length / answers.length) * 100;
+                const commerceScore = (answers.filter(a => a === 2).length / answers.length) * 100;
+                const artsScore = (answers.filter(a => a === 3 || a === 4).length / answers.length) * 100;
+                
+                streamScores['Science (PCM/PCB)'] = mathScienceScore;
+                streamScores['Commerce'] = commerceScore;
+                streamScores['Arts/Humanities'] = artsScore;
+            } else {
+                // For Class 12, recommend career fields
+                const engineeringScore = (answers.filter(a => a === 0).length / answers.length) * 100;
+                const medicalScore = (answers.filter(a => a === 1).length / answers.length) * 100;
+                const businessScore = (answers.filter(a => a === 2).length / answers.length) * 100;
+                const artsScore = (answers.filter(a => a === 3).length / answers.length) * 100;
+                const lawScore = (answers.filter(a => a === 4).length / answers.length) * 100;
+                
+                streamScores['Engineering/Technology'] = engineeringScore;
+                streamScores['Medicine/Healthcare'] = medicalScore;
+                streamScores['Business/Management'] = businessScore;
+                streamScores['Arts/Design'] = artsScore;
+                streamScores['Law/Public Service'] = lawScore;
+            }
+
+            return {
+                categoryScores,
+                streamScores,
+                totalAnswers: answers.length,
+                overallScore: Math.round((answers.filter(a => a !== undefined).length / testQuestions.length) * 100)
+            };
+        }
+
+        // Display results
+        function displayResults(results) {
+            // Overall score
+            document.getElementById('overallScore').textContent = results.overallScore + '%';
+            
+            // Subject/Stream scores
+            const subjectScoresContainer = document.getElementById('subjectScores');
+            subjectScoresContainer.innerHTML = '';
+            
+            const sortedStreams = Object.entries(results.streamScores)
+                .sort(([,a], [,b]) => b - a);
+            
+            sortedStreams.forEach(([stream, score]) => {
+                const scoreDiv = document.createElement('div');
+                scoreDiv.className = 'subject-score';
+                scoreDiv.innerHTML = `
+                    <h5>${stream}</h5>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: ${Math.round(score)}%"></div>
+                    </div>
+                    <p style="margin-top: 0.5rem; color: #666;">${Math.round(score)}% match</p>
+                `;
+                subjectScoresContainer.appendChild(scoreDiv);
+            });
+            
+            // Recommendations
+            const topStream = sortedStreams[0];
+            const recommendationText = generateRecommendations(topStream[0], Math.round(topStream[1]));
+            document.getElementById('recommendationText').innerHTML = recommendationText;
+        }
+
+        // Generate personalized recommendations
+        function generateRecommendations(topStream, score) {
+            const recommendations = {
+                class10: {
+                    'Science (PCM/PCB)': {
+                        high: `
+                            <p><strong>Excellent fit for Science stream!</strong> Your analytical thinking and problem-solving skills make you ideal for:</p>
+                            <ul>
+                                <li><strong>PCM (Physics, Chemistry, Mathematics):</strong> Opens doors to Engineering, Technology, Architecture</li>
+                                <li><strong>PCB (Physics, Chemistry, Biology):</strong> Path to Medicine, Biotechnology, Life Sciences</li>
+                            </ul>
+                            <p><strong>Recommended Actions:</strong></p>
+                            <ul>
+                                <li>Focus on strengthening Math and Science fundamentals</li>
+                                <li>Start preparing for JEE/NEET early</li>
+                                <li>Explore coding and laboratory work</li>
+                                <li>Consider science Olympiads and competitions</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good potential for Science stream.</strong> With focused effort, you can excel in:</p>
+                            <ul>
+                                <li>Applied Sciences and Technology fields</li>
+                                <li>Engineering with specializations matching your interests</li>
+                                <li>Allied health sciences</li>
+                            </ul>
+                            <p><strong>Recommended Actions:</strong></p>
+                            <ul>
+                                <li>Strengthen weak areas in Math/Science</li>
+                                <li>Get extra coaching if needed</li>
+                                <li>Explore practical applications of science concepts</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Science stream might be challenging. Consider exploring other options that better match your strengths.</p>
+                        `
+                    },
+                    'Commerce': {
+                        high: `
+                            <p><strong>Perfect fit for Commerce stream!</strong> Your business acumen and analytical skills suit:</p>
+                            <ul>
+                                <li><strong>Accounting & Finance:</strong> CA, CS, CMA career paths</li>
+                                <li><strong>Business Management:</strong> BBA, MBA route</li>
+                                <li><strong>Economics:</strong> Policy making, research, banking</li>
+                            </ul>
+                            <p><strong>Recommended Actions:</strong></p>
+                            <ul>
+                                <li>Strengthen Mathematics and English</li>
+                                <li>Start following business news and markets</li>
+                                <li>Consider commerce competitions</li>
+                                <li>Explore internships in local businesses</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good potential for Commerce.</strong> Focus on developing:</p>
+                            <ul>
+                                <li>Mathematical and analytical skills</li>
+                                <li>Communication and presentation abilities</li>
+                                <li>Understanding of basic economic principles</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Commerce might not be your strongest area. Consider exploring other streams.</p>
+                        `
+                    },
+                    'Arts/Humanities': {
+                        high: `
+                            <p><strong>Excellent match for Arts/Humanities!</strong> Your creative and analytical thinking opens up:</p>
+                            <ul>
+                                <li><strong>Literature & Languages:</strong> Journalism, Content Writing, Teaching</li>
+                                <li><strong>Social Sciences:</strong> Psychology, Sociology, Political Science</li>
+                                <li><strong>Creative Arts:</strong> Fine Arts, Design, Media Studies</li>
+                            </ul>
+                            <p><strong>Recommended Actions:</strong></p>
+                            <ul>
+                                <li>Develop strong writing and communication skills</li>
+                                <li>Explore creative pursuits and hobbies</li>
+                                <li>Participate in debates, drama, and literary activities</li>
+                                <li>Consider learning additional languages</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good fit for Arts stream.</strong> Focus on:</p>
+                            <ul>
+                                <li>Improving language and communication skills</li>
+                                <li>Exploring creative and analytical subjects</li>
+                                <li>Developing critical thinking abilities</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Arts might not align with your primary strengths. Consider other options.</p>
+                        `
+                    }
+                },
+                class12: {
+                    'Engineering/Technology': {
+                        high: `
+                            <p><strong>Ideal candidate for Engineering!</strong> Your technical aptitude suggests success in:</p>
+                            <ul>
+                                <li><strong>Computer Science:</strong> Software Development, AI/ML, Data Science</li>
+                                <li><strong>Electronics:</strong> Embedded Systems, Telecommunications</li>
+                                <li><strong>Mechanical:</strong> Automotive, Aerospace, Robotics</li>
+                                <li><strong>Civil:</strong> Infrastructure, Construction Management</li>
+                            </ul>
+                            <p><strong>Top College Targets:</strong></p>
+                            <ul>
+                                <li>IITs (prepare for JEE Advanced)</li>
+                                <li>NITs and IIITs (JEE Main)</li>
+                                <li>State Engineering colleges</li>
+                                <li>Private institutions like VIT, SRM, Manipal</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good potential for Engineering.</strong> Focus preparation on:</p>
+                            <ul>
+                                <li>Strengthening Physics and Mathematics</li>
+                                <li>Basic programming skills</li>
+                                <li>Problem-solving techniques</li>
+                                <li>JEE preparation with coaching if needed</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Engineering might be challenging. Consider applied sciences or technology management roles.</p>
+                        `
+                    },
+                    'Medicine/Healthcare': {
+                        high: `
+                            <p><strong>Excellent fit for Medical field!</strong> Your aptitude indicates success in:</p>
+                            <ul>
+                                <li><strong>MBBS:</strong> General Medicine, Surgery specializations</li>
+                                <li><strong>BDS:</strong> Dental Surgery and related fields</li>
+                                <li><strong>Allied Health:</strong> Physiotherapy, Pharmacy, Nursing</li>
+                                <li><strong>Research:</strong> Medical research, Biotechnology</li>
+                            </ul>
+                            <p><strong>Top College Targets:</strong></p>
+                            <ul>
+                                <li>AIIMS (prepare for AIIMS exam)</li>
+                                <li>Government Medical Colleges (NEET)</li>
+                                <li>Private Medical Colleges</li>
+                                <li>Deemed Universities</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good potential for Healthcare.</strong> Consider:</p>
+                            <ul>
+                                <li>Allied health sciences</li>
+                                <li>Pharmacy or Biotechnology</li>
+                                <li>Paramedical courses</li>
+                                <li>Health management programs</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Direct medical courses might be challenging. Consider health administration or related fields.</p>
+                        `
+                    },
+                    'Business/Management': {
+                        high: `
+                            <p><strong>Natural business leader!</strong> Your skills align with:</p>
+                            <ul>
+                                <li><strong>BBA/MBA:</strong> General Management, Marketing, Finance</li>
+                                <li><strong>B.Com:</strong> Accounting, Banking, Insurance</li>
+                                <li><strong>Economics:</strong> Business Economics, Policy Analysis</li>
+                                <li><strong>Entrepreneurship:</strong> Start your own venture</li>
+                            </ul>
+                            <p><strong>Top College Targets:</strong></p>
+                            <ul>
+                                <li>IIMs (prepare for CAT)</li>
+                                <li>DU, Mumbai University for B.Com</li>
+                                <li>Christ, Symbiosis for BBA</li>
+                                <li>ISB, XLRI for management</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good business potential.</strong> Focus on:</p>
+                            <ul>
+                                <li>Developing communication skills</li>
+                                <li>Basic accounting and finance knowledge</li>
+                                <li>Leadership opportunities</li>
+                                <li>Business case study practice</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Traditional business roles might not suit you. Consider technical or creative alternatives.</p>
+                        `
+                    },
+                    'Arts/Design': {
+                        high: `
+                            <p><strong>Creative excellence detected!</strong> Perfect for:</p>
+                            <ul>
+                                <li><strong>Fine Arts:</strong> Painting, Sculpture, Art History</li>
+                                <li><strong>Design:</strong> Graphic, Product, Fashion, Interior</li>
+                                <li><strong>Media:</strong> Film making, Animation, Photography</li>
+                                <li><strong>Literature:</strong> Creative Writing, Journalism</li>
+                            </ul>
+                            <p><strong>Top College Targets:</strong></p>
+                            <ul>
+                                <li>NID (National Institute of Design)</li>
+                                <li>NIFT (Fashion Technology)</li>
+                                <li>JJ School of Arts, Mumbai</li>
+                                <li>Srishti, Manipal School of Design</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good creative potential.</strong> Explore:</p>
+                            <ul>
+                                <li>Applied arts and design</li>
+                                <li>Digital media and communication</li>
+                                <li>Arts and humanities combinations</li>
+                                <li>Creative writing and content creation</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Pure creative arts might be challenging. Consider design thinking in technical fields.</p>
+                        `
+                    },
+                    'Law/Public Service': {
+                        high: `
+                            <p><strong>Excellent legal mind!</strong> Your analytical skills suit:</p>
+                            <ul>
+                                <li><strong>Law:</strong> Corporate Law, Criminal Law, Constitutional Law</li>
+                                <li><strong>Civil Services:</strong> IAS, IPS, IFS careers</li>
+                                <li><strong>Judiciary:</strong> Judicial services, Legal research</li>
+                                <li><strong>Policy:</strong> Government advisory, Think tanks</li>
+                            </ul>
+                            <p><strong>Top College Targets:</strong></p>
+                            <ul>
+                                <li>National Law Universities (CLAT)</li>
+                                <li>DU Faculty of Law</li>
+                                <li>BHU, Aligarh Muslim University</li>
+                                <li>Government Law Colleges</li>
+                            </ul>
+                        `,
+                        medium: `
+                            <p><strong>Good analytical skills for law.</strong> Consider:</p>
+                            <ul>
+                                <li>Corporate law specializations</li>
+                                <li>Legal process outsourcing</li>
+                                <li>Para-legal careers</li>
+                                <li>Policy research roles</li>
+                            </ul>
+                        `,
+                        low: `
+                            <p>Traditional law practice might be challenging. Consider legal technology or compliance roles.</p>
+                        `
+                    }
+                }
+            };
+
+            const level = score >= 70 ? 'high' : score >= 50 ? 'medium' : 'low';
+            return recommendations[currentTest][topStream][level];
+        }
+
+        // Utility functions
+        function retakeTest() {
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'block';
+        }
+
+        function viewDetailedResults() {
+            window.location.href = 'detailed_analysis.html';
+        }
+
+        function viewRoadmap() {
+            // Get the top stream from sorted scores
+            const subjectScores = document.getElementById('subjectScores');
+            if (!subjectScores || !subjectScores.children.length) {
+                alert('Please complete the test first to view your personalized roadmap.');
+                return;
+            }
+            
+            // Get the first (top) subject score element
+            const topSubject = subjectScores.children[0].querySelector('h5').textContent;
+            if (topSubject) {
+                window.location.href = 'roadmap.html?subject=' + encodeURIComponent(topSubject);
+            } else {
+                alert('Please complete the test first to view your personalized roadmap.');
+            }
+        }
+
+        function goBack() {
+            if (confirm('Are you sure you want to go back? Your progress will be lost.')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('questionScreen').style.display === 'block') {
+                if (e.key === 'ArrowRight' || e.key === 'Enter') {
+                    if (answers[currentQuestionIndex] !== undefined) {
+                        nextQuestion();
+                    }
+                } else if (e.key === 'ArrowLeft') {
+                    previousQuestion();
+                } else if (e.key >= '1' && e.key <= '5') {
+                    const optionIndex = parseInt(e.key) - 1;
+                    if (optionIndex < testQuestions[currentQuestionIndex].options.length) {
+                        selectOption(optionIndex);
+                    }
+                }
+            }
+        });
+
+        // Auto-save progress to prevent data loss
+        function saveProgress() {
+            const progressData = {
+                currentTest,
+                currentQuestionIndex,
+                answers,
+                timestamp: Date.now()
+            };
+            // Note: Using temporary storage in memory since localStorage is not available
+            window.testProgress = progressData;
+        }
+
+        // Save progress after each answer
+        const originalSelectOption = selectOption;
+        selectOption = function(optionIndex) {
+            originalSelectOption(optionIndex);
+            saveProgress();
+        };
+    </script>
+</body>
+</html>
